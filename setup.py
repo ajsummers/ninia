@@ -11,8 +11,9 @@ setuptools.setup(
     description="A small Python wrapper for Quantum Espresso - still in development",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="",
+    url="https://github.com/ajsummers/ninia",
     project_urls={
+        'Issues': 'https://github.com/ajsummers/ninia/issues'
     },
     classifiers=[
         "Programming Language :: Python :: 3",
