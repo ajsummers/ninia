@@ -89,7 +89,7 @@ class Relax:
 
     def get_species_info_(self, species_list, pseudodir=None):
 
-        if pseudodir is None:
+        if (self.pseudo_dir is None) and (pseudodir is None):
             raise RuntimeError('Define pseudopotential directory before geometry.')
 
         os.chdir(pseudodir)
