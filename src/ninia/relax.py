@@ -5,7 +5,7 @@ from fnmatch import filter as flt
 import numpy as np
 import re
 
-import mw_species_
+from ..ninia import mw_species_
 
 starting_dir = os.getcwd()
 
