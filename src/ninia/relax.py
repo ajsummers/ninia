@@ -87,12 +87,12 @@ class Relax:
 
         return unique_symbols
 
-    def get_species_info_(self, species_list, pseudodir=None):
+    def get_species_info_(self, species_list):
 
         # For some stupid reason a commented out exception was still killing the program
         # so I deleted it here.
 
-        os.chdir(pseudodir)
+        os.chdir(self.pseudo_dir)
         list_upf = flt(os.listdir('.'), '*.[Uu][Pp][Ff]')
         species_string = ''
 
