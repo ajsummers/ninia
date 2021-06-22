@@ -229,6 +229,7 @@ class Relax:
             raise RuntimeError(f'Missing{runtime_error}')
 
         os.chdir(os.path.realpath(__file__)[:-8])
+        print(os.getcwd())
         with open('relax.i') as f:
             relax_fstring = f.read()
 
