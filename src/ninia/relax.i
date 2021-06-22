@@ -1,25 +1,24 @@
-
 f"""
  &CONTROL
     calculation = 'relax',
-    prefix      = '{prefix}',
-    outdir      = '{output_dir}',
-    pseudo_dir  = '{pseudo_dir}',
+    prefix      = '{self.prefix}',
+    outdir      = '{self.output_dir}',
+    pseudo_dir  = '{self.pseudo_dir}',
  /
  &SYSTEM
     ibrav     = 0,
-    nat  = {num_atoms},
-    ntyp = {num_elem},
-    ecutwfc = {ecutwfc},
-    input_dft = '{functional}',
+    nat  = {self.num_atoms},
+    ntyp = {self.num_elem},
+    ecutwfc = {self.ecutwfc},
+    input_dft = '{self.functional}',
 
     occupations = 'smearing',
     smearing = 'mv',
     degauss = 0.01,
  /
  &ELECTRONS
-    conv_thr = {conv_thr} # 1.0d-8
-    mixing_beta = {mixing_beta} # 0.15d0
+    conv_thr = {self.conv_thr}
+    mixing_beta = {self.mixing_beta}
  /
  &IONS
  /
@@ -27,26 +26,15 @@ f"""
  /
 
 ATOMIC_SPECIES
-{atomic_species}
-
-#   Ru  101.07   Ru_ONCV_PBE-1.0.oncvpsp.upf
-#   C   12.011   C.pbe-n-kjpaw_psl.1.0.0.UPF
-#   H   1.008    H_ONCV_PBE-1.0.oncvpsp.upf
+{self.atomic_species}
 
 CELL_PARAMETERS angstrom
-{cell_parameters}
-
-#9.36443933730765   5.40656161739439   0.00000000000000
-#0.00000000000000   5.40656161739439   0.00000000000000
-#0.00000000000000   0.00000000000000   18.621657682203
+{self.cell_parameters}
 
 ATOMIC_POSITIONS angstrom
-{atomic_positions}
+{self.atomic_positions}
 
 K_POINTS automatic
-{k_points}
-
-#   4 4 4 0 0 0
-
+{self.k_points}
 
 """
