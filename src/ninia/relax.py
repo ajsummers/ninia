@@ -5,7 +5,7 @@ from fnmatch import filter as flt
 import numpy as np
 import re
 
-from mw_species_ import mm_of_elements
+import mw_species_
 
 starting_dir = os.getcwd()
 
@@ -83,7 +83,7 @@ class Relax:
 
             r = re.compile(rf'{species}[_|.]\S+\Z', flags=re.IGNORECASE)
             match = list(filter(r.match, list_upf))[0]
-            mw_species = mm_of_elements[species]
+            mw_species = mw_species_.mm_of_elements[species]
 
             species_string += f'   {species}\t{mw_species}\t{match}\n'
 
