@@ -89,8 +89,8 @@ class Relax:
 
     def get_species_info_(self, species_list, pseudodir=None):
 
-        # if (self.pseudo_dir is None) and (pseudodir is None):
-        #     raise RuntimeError('Define pseudopotential directory before geometry.')
+        # For some stupid reason a commented out exception was still killing the program
+        # so I deleted it here.
 
         os.chdir(pseudodir)
         list_upf = flt(os.listdir('.'), '*.[Uu][Pp][Ff]')
