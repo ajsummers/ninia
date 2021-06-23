@@ -23,8 +23,8 @@ setuptools.setup(
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
     include_package_data=True,
-    package_data={
-        '': ['input/*.i', 'input/*.sh']
-    },
+    # package_data={
+    #     '': ['input/*.i', 'input/*.sh']
+    # },
     python_requires=">=3.6",
 )
