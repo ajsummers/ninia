@@ -28,23 +28,24 @@ class Relax:
 
     def __init__(self, prefix=None, functional=None, pseudodir=None):
 
-        if prefix is not None:
-            self.prefix = prefix
-        else:
-            warnings.warn('Prefix not defined. Setting to "untitled".', UserWarning)
+        # TODO - class parameters prefix, functional, and pseudo_dir not getting set if None type
 
-        if functional is not None:
-            self.functional = functional
-        else:
+        if prefix is None:
+            warnings.warn('Prefix not defined. Setting to "untitled".', UserWarning)
+        self.prefix = prefix
+
+        if functional is None:
             warnings.warn('Functional not defined. Using BEEF-vdW by default.', UserWarning)
             self.functional = 'beef'
-
-        if pseudodir is not None:
-            self.check_directory_(pseudodir)
-            self.pseudo_dir = pseudodir
         else:
+            self.functional = functional
+
+        if pseudodir is None:
             warnings.warn('Pseudopotential directory not specified. This will need to be defined '
                           'before loading geometry.', UserWarning)
+        else:
+            self.check_directory_(pseudodir)
+        self.pseudo_dir = pseudodir
 
         self.geometry = None
         self.output_dir = None

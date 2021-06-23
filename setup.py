@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="ninia",
-    version="0.0.29",
+    version="0.0.30",
     author="Alex Summers",
     author_email="ajs0201@auburn.edu",
     description="A small Python wrapper for Quantum Espresso - still in development",
@@ -20,11 +20,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    # package_dir={"": "src"},
     packages=setuptools.find_packages(),
     include_package_data=True,
-    # package_data={
-    #     '': ['input/*.i', 'input/*.sh']
-    # },
     python_requires=">=3.6",
 )
