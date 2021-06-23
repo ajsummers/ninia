@@ -9,7 +9,6 @@ For more information see the GitHub repository at https://github.com/ajsummers/n
 import pkg_resources
 import warnings
 import sys
-import csv
 import os
 import re
 
@@ -19,9 +18,9 @@ import numpy as np
 
 starting_dir = os.getcwd()
 
-mm_data = pkg_resources.resource_string(__name__, 'data/mm_of_elements.csv').decode(sys.stdout.encoding)
-mm_csv = csv.reader(mm_data)
-molarmass_df = pd.DataFrame(mm_csv)  # Pull in molar mass data from separate csv file
+# Pull in molar mass data from separate csv file
+mm_data = pkg_resources.resource_stream(__name__, 'data/mm_of_elements.csv')
+molarmass_df = pd.read_csv(mm_data, encoding=sys.stdout.encoding, index_col=0)
 
 
 class Relax:
