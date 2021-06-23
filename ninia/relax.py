@@ -258,4 +258,3 @@ class Relax:
 
         os.chdir(starting_dir)
         print(f'Created bash file {self.prefix}.sh')
-

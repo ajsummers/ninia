@@ -5,6 +5,8 @@ A small Python wrapper for setting up Quantum Espresso input files. More functio
 <p>Currently, there is only assumed support for hexagonal close packed (HCP) crystal structures. 
 Support for other structures may be tested but *should not* be expected.</p>
 
+> Note: The ```calc.create_bash()``` function (described later) assumes a Torque/PBS structure and sets up script to run in parallel using MPI. It also assumes an already built Quantum Espresso package and that ```pw.x``` can be run from the command-line. 
+
 ---
 #### Example usage:
 
@@ -28,11 +30,32 @@ about ASE (Atomic Simulation Environment) can be found at their homepage:
 Then you can start using ninia to convert this geometry into an input file:
 ```python
 from ninia import relax
-calc = relax.Relax(prefix='Ru_test', functional='beef',
-                   pseudodir='/home/ajs0201/workQE/pseudo')
-calc.load_geometry(surface)
-calc.set_directories(outputdir='/home/ajs0201/workQE/output')
+calc = relax.Relax(prefix='Ru_test', functional='beef')
+calc.set_directories(outputdir='/home/ajs0201/workQE/output',
+                     pseudodir='/home/ajs0201/workQE/pseudo')
 # Ninia assumes the current script directory as the input directory
 # if none is given.
+calc.load_geometry(surface)
 calc.set_parameters(mixing_beta=0.15)
 ```
+---
+If you do not specify the **prefix** and **functional** during the initialization step, the program will give warnings. Additionally, the pseudopotential directory ***must*** be set before the ```calc.load_geometry()``` step.
+
+In the ```calc.set_directories()``` step, you can set the following directories:
+* The directory to place input and bash files (**inputdir**)
+* The directory to place output files created by Quantum Espresso (**outputdir**)
+* The directory that contains pseudopotentials relevant to the calculation (**pseudodir**)
+> Note: The output directory, post calculation, will contain wave function files (.wfc) and save directories (.save/). This ***does not*** include output files (.out), which will be place in the input directory, unless explicitly changed.
+
+In the ```calc.set_parameters()``` step, you can set the following parameters [default]:
+* Plane wave cutoff density (ecutwfc) [30.0]
+* Convergence threshold (conv_thr) [1e-8]
+* Electron mixing beta (mixing_beta) [0.7]
+* Number of k-points (k_points) [[4, 4, 4, 0, 0, 0]]
+* Functional (functional) [beef]
+
+In the ```calc.create_bash()``` step, you can set the following parameters [default]:
+* Memory used by calculation in GB (memory) [50]
+* Number of CPUs used by calculation (cpus) [8]
+* Walltime allowed for execution in hours (hours) [30]
+
