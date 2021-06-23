@@ -1,2 +1,3 @@
 
-recursive-include input *
+recursive-include input/*.i
+recurvise-include input/*.sh
