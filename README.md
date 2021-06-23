@@ -37,6 +37,10 @@ calc.set_directories(outputdir='/home/ajs0201/workQE/output',
 # if none is given.
 calc.load_geometry(surface)
 calc.set_parameters(mixing_beta=0.15)
+
+calc.create_input()
+calc.create_bash(hours=20)
+# This will create both an input (.i) file and bash (.sh) for the geometry above
 ```
 ---
 If you do not specify the **prefix** and **functional** during the initialization step, the program will give warnings. Additionally, the pseudopotential directory ***must*** be set before the ```calc.load_geometry()``` step.
