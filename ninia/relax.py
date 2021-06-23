@@ -1,10 +1,17 @@
-import pkg_resources
+# import pkg_resources
 import warnings
 import os
 
 from fnmatch import filter as flt
 import numpy as np
 import re
+
+try:
+    import importlib.resources as pkg_resources
+except ImportError:
+    import importlib_resources as pkg_resources
+
+from . import input
 
 starting_dir = os.getcwd()
 
@@ -229,11 +236,11 @@ class Relax:
         if runtime_error is not '':
             raise RuntimeError(f'Missing{runtime_error}')
 
-        stream = pkg_resources.resource_stream(__name__, 'input/relax.i')
-        with open(stream) as f:
-            relax_fstring = f.read()
+        input_template = pkg_resources.read_text(input, 'relax.i')
+#        with open(stream) as f:
+#            relax_fstring = f.read()
 
-        compiled_fstring = compile(relax_fstring, '<fstring_from_file', 'eval')
+        compiled_fstring = compile(input_template, '<fstring_from_file', 'eval')
         formatted_relax = eval(compiled_fstring)
 
         os.chdir(self.input_dir)
@@ -260,11 +267,11 @@ class Relax:
         else:
             self.hours = hours
 
-        stream = pkg_resources.resource_stream(__name__, 'input/relax.sh')
-        with open(stream) as f:
-            relax_bash_fstring = f.read()
+        template_bash = pkg_resources.read_text(input, 'relax.sh')
+        # with open(stream) as f:
+        #     relax_bash_fstring = f.read()
 
-        compiled_bash_fstring = compile(relax_bash_fstring, '<fstring_from_file', 'eval')
+        compiled_bash_fstring = compile(template_bash, '<fstring_from_file', 'eval')
         formatted_bash_relax = eval(compiled_bash_fstring)
 
         os.chdir(self.input_dir)
