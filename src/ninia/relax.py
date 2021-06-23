@@ -1,3 +1,4 @@
+import pkg_resources
 import warnings
 import os
 
@@ -228,9 +229,8 @@ class Relax:
         if runtime_error is not '':
             raise RuntimeError(f'Missing{runtime_error}')
 
-        os.chdir(os.path.realpath(__file__)[:-8])
-        print(os.getcwd())
-        with open('relax.i') as f:
+        stream = pkg_resources.resource_stream(__name__, 'relax.i')
+        with open(stream) as f:
             relax_fstring = f.read()
 
         compiled_fstring = compile(relax_fstring, '<fstring_from_file', 'eval')
@@ -260,8 +260,8 @@ class Relax:
         else:
             self.hours = hours
 
-        os.chdir(os.path.realpath(__file__)[:-8])
-        with open('relax.sh') as f:
+        stream = pkg_resources.resource_stream(__name__, 'relax.sh')
+        with open(stream) as f:
             relax_bash_fstring = f.read()
 
         compiled_bash_fstring = compile(relax_bash_fstring, '<fstring_from_file', 'eval')
