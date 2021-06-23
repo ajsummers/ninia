@@ -3,9 +3,11 @@
 A small Python wrapper for setting up Quantum Espresso input files. More functionality may be added later.
 
 <p>Currently, there is only assumed support for hexagonal close packed (HCP) crystal structures. 
-Support for other structures may be tested but *should not* be expected.</p>
+Support for other structures may be tested but <b>should not</b> be expected.</p>
 
 > Note: The ```calc.create_bash()``` function (described later) assumes a Torque/PBS structure and sets up script to run in parallel using MPI. It also assumes an already built Quantum Espresso package and that ```pw.x``` can be run from the command-line. 
+> 
+> For tips on how to install Quantum Espresso on an HPC cluster, go to [Espresso Installation](/espresso_installation.md).
 
 ---
 #### Example usage:
