@@ -1,17 +1,17 @@
-# import pkg_resources
+import pkg_resources
 import warnings
+import sys
 import os
+import re
 
 from fnmatch import filter as flt
 import numpy as np
-import re
 
-try:
-    import importlib.resources as pkg_resources
-except ImportError:
-    import importlib_resources as pkg_resources
-
-from . import input
+# try:
+#     import importlib.resources as pkg_resources
+# except ImportError:
+#     import importlib_resources as pkg_resources
+# TODO - Determine if importlib will make noticeable performance difference
 
 starting_dir = os.getcwd()
 
@@ -236,7 +236,7 @@ class Relax:
         if runtime_error is not '':
             raise RuntimeError(f'Missing{runtime_error}')
 
-        input_template = pkg_resources.read_text(input, 'relax.i')
+        input_template = pkg_resources.resource_string(__name__, 'input/relax.i').decode(sys.stdout.encoding)
 #        with open(stream) as f:
 #            relax_fstring = f.read()
 
@@ -267,11 +267,11 @@ class Relax:
         else:
             self.hours = hours
 
-        template_bash = pkg_resources.read_text(input, 'relax.sh')
+        bash_template = pkg_resources.resource_string(__name__, 'input/relax.sh').decode(sys.stdout.encoding)
         # with open(stream) as f:
         #     relax_bash_fstring = f.read()
 
-        compiled_bash_fstring = compile(template_bash, '<fstring_from_file', 'eval')
+        compiled_bash_fstring = compile(bash_template, '<fstring_from_file', 'eval')
         formatted_bash_relax = eval(compiled_bash_fstring)
 
         os.chdir(self.input_dir)
