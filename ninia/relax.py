@@ -115,9 +115,7 @@ class Relax:
     @staticmethod
     def check_directory_(directory):
 
-        if os.path.isdir(directory):
-            pass
-        else:
+        if not os.path.isdir(directory):
             raise NotADirectoryError(f'{directory} is not a valid directory.')
 
     def set_prefix_(self):
