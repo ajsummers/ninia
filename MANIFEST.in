@@ -1,3 +1,3 @@
 
-recursive-include input/*.i
-recurvise-include input/*.sh
+include ninia/*.i
+include ninia/*.sh
