@@ -94,7 +94,7 @@ class Relax:
         # so I deleted it here.
 
         os.chdir(self.pseudo_dir)
-        list_upf = flt(os.listdir(''), '*.[Uu][Pp][Ff]')
+        list_upf = flt(os.listdir('.'), '*.[Uu][Pp][Ff]')
         species_string = ''
 
         for species in species_list:
