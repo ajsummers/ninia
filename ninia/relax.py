@@ -7,13 +7,12 @@ import re
 from fnmatch import filter as flt
 import numpy as np
 
-# try:
-#     import importlib.resources as pkg_resources
-# except ImportError:
-#     import importlib_resources as pkg_resources
 # TODO - Determine if importlib will make noticeable performance difference
 
 starting_dir = os.getcwd()
+
+# TODO - Clean up code and put mm_of_elements in a separate csv
+# TODO - Set first stable version as 0.1.0
 
 mm_of_elements = {'H': 1.00794, 'He': 4.002602, 'Li': 6.941, 'Be': 9.012182, 'B': 10.811, 'C': 12.0107, 'N': 14.0067,
               'O': 15.9994, 'F': 18.9984032, 'Ne': 20.1797, 'Na': 22.98976928, 'Mg': 24.305, 'Al': 26.9815386,
@@ -96,9 +95,6 @@ class Relax:
         return unique_symbols
 
     def get_species_info_(self, species_list):
-
-        # For some stupid reason a commented out exception was still killing the program
-        # so I deleted it here.
 
         os.chdir(self.pseudo_dir)
         list_upf = flt(os.listdir('.'), '*.[Uu][Pp][Ff]')
@@ -237,9 +233,6 @@ class Relax:
             raise RuntimeError(f'Missing{runtime_error}')
 
         input_template = pkg_resources.resource_string(__name__, 'input/relax.i').decode(sys.stdout.encoding)
-#        with open(stream) as f:
-#            relax_fstring = f.read()
-
         compiled_fstring = compile(input_template, '<fstring_from_file', 'eval')
         formatted_relax = eval(compiled_fstring)
 
@@ -268,9 +261,6 @@ class Relax:
             self.hours = hours
 
         bash_template = pkg_resources.resource_string(__name__, 'input/relax.sh').decode(sys.stdout.encoding)
-        # with open(stream) as f:
-        #     relax_bash_fstring = f.read()
-
         compiled_bash_fstring = compile(bash_template, '<fstring_from_file', 'eval')
         formatted_bash_relax = eval(compiled_bash_fstring)
 
