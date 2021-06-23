@@ -26,7 +26,7 @@ molarmass_df = pd.DataFrame(mm_csv)  # Pull in molar mass data from separate csv
 
 class Relax:
 
-    def __init__(self, prefix=None, functional=None, pseudodir=None):
+    def __init__(self, prefix=None, functional=None):
 
         # TODO - class parameters prefix, functional, and pseudo_dir not getting set if None type
 
@@ -40,12 +40,12 @@ class Relax:
         else:
             self.functional = functional
 
-        if pseudodir is None:
-            warnings.warn('Pseudopotential directory not specified. This will need to be defined '
-                          'before loading geometry.', UserWarning)
-        else:
-            self.check_directory_(pseudodir)
-        self.pseudo_dir = pseudodir
+        # if pseudodir is None:
+        #     warnings.warn('Pseudopotential directory not specified. This will need to be defined '
+        #                   'before loading geometry.', UserWarning)
+        # else:
+        #     self.check_directory_(pseudodir)
+        self.pseudo_dir = None
 
         self.geometry = None
         self.output_dir = None
