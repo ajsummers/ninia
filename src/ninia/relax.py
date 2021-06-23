@@ -229,7 +229,7 @@ class Relax:
         if runtime_error is not '':
             raise RuntimeError(f'Missing{runtime_error}')
 
-        stream = pkg_resources.resource_stream(__name__, 'relax.i')
+        stream = pkg_resources.resource_stream(__name__, 'input/relax.i')
         with open(stream) as f:
             relax_fstring = f.read()
 
@@ -260,7 +260,7 @@ class Relax:
         else:
             self.hours = hours
 
-        stream = pkg_resources.resource_stream(__name__, 'relax.sh')
+        stream = pkg_resources.resource_stream(__name__, 'input/relax.sh')
         with open(stream) as f:
             relax_bash_fstring = f.read()
 
