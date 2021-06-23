@@ -24,7 +24,7 @@ setuptools.setup(
     packages=setuptools.find_packages(where="src"),
     include_package_data=True,
     package_data={
-        'ninia': ['*.i', '*.sh']
+        'src': ['*.i', '*.sh']
     },
     python_requires=">=3.6",
 )
