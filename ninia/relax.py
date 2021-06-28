@@ -123,8 +123,6 @@ class Relax:
         os.chdir(self.output_dir)
         if (os.path.isdir(f'{self.prefix}.save')) or (os.path.isfile(f'{self.prefix}.wfc1')):
             self.prefix += '_1'
-        else:
-            pass
 
         i = 1
         while (os.path.isdir(f'{self.prefix}.save')) or (os.path.isfile(f'{self.prefix}.wfc1')):
