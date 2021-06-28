@@ -120,16 +120,23 @@ class Relax:
 
     def set_prefix_(self):
 
-        os.chdir(self.output_dir)
-        if (os.path.isdir(f'{self.prefix}.save')) or (os.path.isfile(f'{self.prefix}.wfc1')):
-            self.prefix += '_1'
+        os.chdir(self.input_dir)
+        if not (os.path.isdir(f'{self.prefix}.i')):
+            os.chdir(self.output_dir)
+            if (os.path.isdir(f'{self.prefix}.save')) or (os.path.isfile(f'{self.prefix}.wfc1')):
+                self.prefix += '_1'
 
-        i = 1
-        while (os.path.isdir(f'{self.prefix}.save')) or (os.path.isfile(f'{self.prefix}.wfc1')):
-            i += 1
-            self.prefix = f'{self.prefix.rstrip("0123456789")}{i}'
+            i = 1
+            while (os.path.isdir(f'{self.prefix}.save')) or (os.path.isfile(f'{self.prefix}.wfc1')):
+                i += 1
+                self.prefix = f'{self.prefix.rstrip("0123456789")}{i}'
 
-        os.chdir(starting_dir)
+            os.chdir(starting_dir)
+            return True
+
+        else:
+            os.chdir(starting_dir)
+            return False
 
     def set_directories(self, inputdir=None, outputdir=None, pseudodir=None):
 
@@ -194,40 +201,44 @@ class Relax:
                 k_string += f' {point}'
             self.k_points = k_string
 
-    def create_input(self):
+    def create_input(self, repeat=False):
 
-        self.set_prefix_()
+        if self.set_prefix_():
 
-        runtime_error = ''
-        runtime_error += ' self.geometry' if not self.geometry else ''
-        runtime_error += ' self.prefix' if not self.prefix else ''
-        runtime_error += ' self.output_dir' if not self.output_dir else ''
-        runtime_error += ' self.pseudo_dir' if not self.pseudo_dir else ''
-        runtime_error += ' self.input_dir' if not self.input_dir else ''
-        runtime_error += ' self.num_atoms' if not self.num_atoms else ''
-        runtime_error += ' self.num_elem' if not self.num_elem else ''
-        runtime_error += ' self.ecutwfc' if not self.ecutwfc else ''
-        runtime_error += ' self.functional' if not self.functional else ''
-        runtime_error += ' self.conv_thr' if not self.conv_thr else ''
-        runtime_error += ' self.mixing_beta' if not self.mixing_beta else ''
-        runtime_error += ' self.atomic_species' if not self.atomic_species else ''
-        runtime_error += ' self.cell_parameters' if not self.cell_parameters else ''
-        runtime_error += ' self.atomic_positions' if not self.atomic_positions else ''
-        runtime_error += ' self.k_points' if not self.k_points else ''
+            runtime_error = ''
+            runtime_error += ' self.geometry' if not self.geometry else ''
+            runtime_error += ' self.prefix' if not self.prefix else ''
+            runtime_error += ' self.output_dir' if not self.output_dir else ''
+            runtime_error += ' self.pseudo_dir' if not self.pseudo_dir else ''
+            runtime_error += ' self.input_dir' if not self.input_dir else ''
+            runtime_error += ' self.num_atoms' if not self.num_atoms else ''
+            runtime_error += ' self.num_elem' if not self.num_elem else ''
+            runtime_error += ' self.ecutwfc' if not self.ecutwfc else ''
+            runtime_error += ' self.functional' if not self.functional else ''
+            runtime_error += ' self.conv_thr' if not self.conv_thr else ''
+            runtime_error += ' self.mixing_beta' if not self.mixing_beta else ''
+            runtime_error += ' self.atomic_species' if not self.atomic_species else ''
+            runtime_error += ' self.cell_parameters' if not self.cell_parameters else ''
+            runtime_error += ' self.atomic_positions' if not self.atomic_positions else ''
+            runtime_error += ' self.k_points' if not self.k_points else ''
 
-        if runtime_error is not '':
-            raise RuntimeError(f'Missing{runtime_error}')
+            if runtime_error is not '':
+                raise RuntimeError(f'Missing{runtime_error}')
 
-        input_template = pkg_resources.resource_string(__name__, 'input/relax.i').decode(sys.stdout.encoding)
-        compiled_fstring = compile(input_template, '<fstring_from_file', 'eval')
-        formatted_relax = eval(compiled_fstring)
+            input_template = pkg_resources.resource_string(__name__, 'input/relax.i').decode(sys.stdout.encoding)
+            compiled_fstring = compile(input_template, '<fstring_from_file', 'eval')
+            formatted_relax = eval(compiled_fstring)
 
-        os.chdir(self.input_dir)
-        with open(f'{self.prefix}.i', 'a') as f:
-            f.write(formatted_relax)
+            os.chdir(self.input_dir)
+            with open(f'{self.prefix}.i', 'a') as f:
+                f.write(formatted_relax)
 
-        os.chdir(starting_dir)
-        print(f'Created input file {self.prefix}.i')
+            os.chdir(starting_dir)
+            print(f'Created input file {self.prefix}.i')
+
+        else:
+
+            print(f'Muted redundant input file {self.prefix}.i')
 
     def create_bash(self, memory=None, cpus=None, hours=None):
 
@@ -251,8 +262,15 @@ class Relax:
         formatted_bash_relax = eval(compiled_bash_fstring)
 
         os.chdir(self.input_dir)
-        with open(f'{self.prefix}.sh', 'a') as f:
-            f.write(formatted_bash_relax)
+        if not (os.path.isdir(f'{self.prefix}.sh')):
 
-        os.chdir(starting_dir)
-        print(f'Created bash file {self.prefix}.sh')
+            with open(f'{self.prefix}.sh', 'a') as f:
+                f.write(formatted_bash_relax)
+
+            os.chdir(starting_dir)
+            print(f'Created bash file {self.prefix}.sh')
+
+        else:
+
+            print(f'Muted redundant bash file {self.prefix}.sh')
+
