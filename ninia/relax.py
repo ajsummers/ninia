@@ -121,7 +121,7 @@ class Relax:
     def set_prefix_(self):
 
         os.chdir(self.input_dir)
-        if not (os.path.isdir(f'{self.prefix}.i')):
+        if not (os.path.isfile(f'{self.prefix}.i')):
             os.chdir(self.output_dir)
             if (os.path.isdir(f'{self.prefix}.save')) or (os.path.isfile(f'{self.prefix}.wfc1')):
                 self.prefix += '_1'
@@ -262,7 +262,7 @@ class Relax:
         formatted_bash_relax = eval(compiled_bash_fstring)
 
         os.chdir(self.input_dir)
-        if not (os.path.isdir(f'{self.prefix}.sh')):
+        if not (os.path.isfile(f'{self.prefix}.sh')):
 
             with open(f'{self.prefix}.sh', 'a') as f:
                 f.write(formatted_bash_relax)
