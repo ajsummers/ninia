@@ -10,6 +10,11 @@ Support for other structures may be tested but <b>should not</b> be expected.</p
 > For tips on how to install Quantum Espresso on an HPC cluster, go to [Espresso Installation](/espresso_installation.md).
 
 ---
+###Behind the Name
+![Ninia - Coffee Snake](Images/Ninia_atrata.jpg "Ninia - Coffee Snake")
+**Ninia** is a genus of snakes, also known as **coffee snakes**, that are native to parts of Central and South America. The choice of name is a play on **Python** and Quantum **Espresso**.
+
+---
 #### Example usage:
 
 ```python
