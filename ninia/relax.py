@@ -39,11 +39,9 @@ class Relax:
         else:
             self.functional = functional
 
-        # if pseudodir is None:
-        #     warnings.warn('Pseudopotential directory not specified. This will need to be defined '
-        #                   'before loading geometry.', UserWarning)
-        # else:
-        #     self.check_directory_(pseudodir)
+        # TODO - Add additional checks for pseudopotential directory?
+        # Initialize class parameters
+
         self.pseudo_dir = None
 
         self.geometry = None
@@ -119,6 +117,8 @@ class Relax:
             raise NotADirectoryError(f'{directory} is not a valid directory.')
 
     def set_prefix_(self):
+
+        # TODO - test if this actually omits repeat input files
 
         os.chdir(self.input_dir)
         if not (os.path.isfile(f'{self.prefix}.i')):
@@ -230,7 +230,7 @@ class Relax:
             formatted_relax = eval(compiled_fstring)
 
             os.chdir(self.input_dir)
-            with open(f'{self.prefix}.i', 'a') as f:
+            with open(f'{self.prefix}.i', 'w+') as f:
                 f.write(formatted_relax)
 
             os.chdir(starting_dir)
@@ -264,7 +264,7 @@ class Relax:
         os.chdir(self.input_dir)
         if not (os.path.isfile(f'{self.prefix}.sh')):
 
-            with open(f'{self.prefix}.sh', 'a') as f:
+            with open(f'{self.prefix}.sh', 'w+') as f:
                 f.write(formatted_bash_relax)
 
             os.chdir(starting_dir)
