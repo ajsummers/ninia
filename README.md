@@ -48,7 +48,7 @@ calc.load_geometry(surface)
 calc.set_parameters(mixing_beta=0.15)
 
 calc.create_input()
-calc.create_bash(hours=20)
+calc.create_job(hours=20)
 # This will create both an input (.i) file and bash (.sh) for the geometry above
 ```
 ---
@@ -61,13 +61,16 @@ In the ```calc.set_directories()``` step, you can set the following directories:
 > Note: The output directory, post calculation, will contain wave function files (.wfc) and save directories (.save/). This ***does not*** include output files (.out), which will be place in the input directory, unless explicitly changed.
 
 In the ```calc.set_parameters()``` step, you can set the following parameters [default]:
-* Plane wave cutoff density (ecutwfc) [30.0]
+* Plane wave cutoff energy (ecutwfc) [30.0]
+* Plane wave cutoff density (ecutrho) [4*ecutwfc]
 * Convergence threshold (conv_thr) [1e-8]
 * Electron mixing beta (mixing_beta) [0.7]
 * Number of k-points (k_points) [[4, 4, 4, 0, 0, 0]]
 * Functional (functional) [beef]
 
-In the ```calc.create_bash()``` step, you can set the following parameters [default]:
+In the ```calc.create_job()``` step, you can set the following parameters [default]:
+* Job type [```pbs.sh```] (other option ```slurm.sh```)
+* Partition/queue [```general```]
 * Memory used by calculation in GB (memory) [50]
 * Number of CPUs used by calculation (cpus) [8]
 * Walltime allowed for execution in hours (hours) [30]
