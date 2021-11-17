@@ -52,6 +52,7 @@ class Relax:
         self.num_atoms = None
         self.num_elem = None
         self.ecutwfc = None
+        self.ecutrho = None
 
         self.conv_thr = None
         self.mixing_beta = None
@@ -60,6 +61,9 @@ class Relax:
         self.cell_parameters = None
         self.atomic_positions = None
         self.k_points = None
+
+        self.job_type = None
+        self.partition = None
 
         self.memory = None
         self.cpus = None
@@ -168,7 +172,8 @@ class Relax:
         self.get_species_info_(species_list)
         self.get_cell_parameters_(self.geometry)
 
-    def set_parameters(self, ecutwfc=None, conv_thr=None, mixing_beta=None, k_points=None, functional=None):
+    def set_parameters(self, ecutwfc=None, ecutrho=None, conv_thr=None, mixing_beta=None, k_points=None,
+                       functional=None):
 
         if (self.functional is None) and (functional is None):
             warnings.warn('Functional is still not specified. Creating input will likely result in an error.',
@@ -182,6 +187,11 @@ class Relax:
             self.ecutwfc = 30.0
         elif ecutwfc is not None:
             self.ecutwfc = ecutwfc
+
+        if (self.ecutrho is None) and (ecutrho is None):
+            self.ecutrho = 4 * self.ecutwfc
+        elif ecutrho is not None:
+            self.ecutrho = ecutrho
 
         if (self.conv_thr is None) and (conv_thr is None):
             self.conv_thr = '1.0d-8'
@@ -240,7 +250,17 @@ class Relax:
 
             print(f'Muted redundant input file {self.prefix}.i')
 
-    def create_bash(self, memory=None, cpus=None, hours=None):
+    def create_job(self, job_type=None, partition=None, memory=None, cpus=None, hours=None):
+
+        if job_type is None:
+            self.job_type = 'pbs.sh'
+        else:
+            self.job_type = job_type
+
+        if partition is None:
+            self.partition = 'general'
+        else:
+            self.partition = partition
 
         if memory is None:
             self.memory = 50
@@ -257,7 +277,7 @@ class Relax:
         else:
             self.hours = hours
 
-        bash_template = pkg_resources.resource_string(__name__, 'input/relax.sh').decode(sys.stdout.encoding)
+        bash_template = pkg_resources.resource_string(__name__, f'input/{self.job_type}').decode(sys.stdout.encoding)
         compiled_bash_fstring = compile(bash_template, '<fstring_from_file', 'eval')
         formatted_bash_relax = eval(compiled_bash_fstring)
 
