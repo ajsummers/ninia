@@ -17,7 +17,7 @@ class Object:
         else:
             self.atoms = file
 
-    def ase_from_ouput(self, file=None):
+    def ase_from_output(self, file=None):
 
         if file is not None:
             self.file = file
