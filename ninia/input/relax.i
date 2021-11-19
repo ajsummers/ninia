@@ -19,6 +19,7 @@ f"""
  &ELECTRONS
     conv_thr = {self.conv_thr}
     mixing_beta = {self.mixing_beta}
+    electron_maxstep = {self.electron_maxstep}
  /
  &IONS
  /

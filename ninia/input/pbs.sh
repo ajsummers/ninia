@@ -2,7 +2,7 @@ f'''
 
 #PBS -N {self.prefix}
 #PBS -l mem={self.memory}gb,nodes=1:ppn={self.cpus},walltime={self.hours}:00:00
-#PBS -q general
+#PBS -q {self.partition}
 
 start=`date +%s`
 

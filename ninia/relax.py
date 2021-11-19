@@ -57,6 +57,7 @@ class Relax:
 
         self.conv_thr = None
         self.mixing_beta = None
+        self.electron_maxstep = None
 
         self.atomic_species = None
         self.cell_parameters = None
@@ -174,7 +175,7 @@ class Relax:
         self.get_cell_parameters_(self.geometry)
 
     def set_parameters(self, ecutwfc=None, ecutrho=None, conv_thr=None, mixing_beta=None, k_points=None,
-                       functional=None):
+                       electron_maxstep=None, functional=None):
 
         if (self.functional is None) and (functional is None):
             warnings.warn('Functional is still not specified. Creating input will likely result in an error.',
@@ -211,6 +212,11 @@ class Relax:
             for point in k_points:
                 k_string += f' {point}'
             self.k_points = k_string
+
+        if (self.electron_maxstep is None) and (electron_maxstep is None):
+            self.electron_maxstep = 100
+        elif electron_maxstep is not None:
+            self.electron_maxstep = electron_maxstep
 
     def create_input(self, repeat=False):
 
