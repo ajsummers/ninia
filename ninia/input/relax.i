@@ -10,6 +10,7 @@ f"""
     nat  = {self.num_atoms},
     ntyp = {self.num_elem},
     ecutwfc = {self.ecutwfc},
+    ecutrho = {self.ecutrho},
     input_dft = '{self.functional}',
 
     occupations = 'smearing',
