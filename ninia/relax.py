@@ -49,6 +49,7 @@ class Relax:
         self.output_dir = None
         self.pseudo_dir = None
         self.input_dir = None
+        self.nstep = None
 
         self.num_atoms = None
         self.num_elem = None
@@ -176,7 +177,7 @@ class Relax:
         self.get_cell_parameters_(self.geometry)
 
     def set_parameters(self, ecutwfc=None, ecutrho=None, conv_thr=None, mixing_beta=None, k_points=None,
-                       electron_maxstep=None, functional=None):
+                       electron_maxstep=None, functional=None, nstep=None):
 
         if (self.functional is None) and (functional is None):
             warnings.warn('Functional is still not specified. Creating input will likely result in an error.',
@@ -218,6 +219,11 @@ class Relax:
             self.electron_maxstep = 100
         elif electron_maxstep is not None:
             self.electron_maxstep = electron_maxstep
+
+        if (self.nstep is None) and (nstep is None):
+            self.nstep = 100
+        elif nstep is not None:
+            self.nstep = nstep
 
     def create_input(self, repeat=False):
 
@@ -281,7 +287,7 @@ class Relax:
             self.cpus = cpus
 
         if hours is None:
-            self.hours = 30
+            self.hours = 100
         else:
             self.hours = hours
 

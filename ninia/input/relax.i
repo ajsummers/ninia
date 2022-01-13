@@ -4,6 +4,7 @@ f"""
     prefix      = '{self.prefix}',
     outdir      = '{self.output_dir}',
     pseudo_dir  = '{self.pseudo_dir}',
+    nstep = {self.nstep},
  /
  &SYSTEM
     ibrav     = 0,
