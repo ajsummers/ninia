@@ -70,6 +70,7 @@ class Relax:
         self.memory = None
         self.cpus = None
         self.hours = None
+        self.nk = 1
 
     def get_position_info_(self, ase_object):
 

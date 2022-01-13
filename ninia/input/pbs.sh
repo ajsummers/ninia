@@ -6,7 +6,7 @@ f'''
 
 start=`date +%s`
 
-mpirun -np {self.cpus} pw.x -nk 2 < {self.input_dir}/{self.prefix}.i > {self.input_dir}/{self.prefix}.out
+mpirun -np {self.cpus} pw.x -nk {self.nk} < {self.input_dir}/{self.prefix}.i > {self.input_dir}/{self.prefix}.out
 
 end=`date +%s`
 
