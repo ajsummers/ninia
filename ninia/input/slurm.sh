@@ -1,5 +1,4 @@
-f'''
-#!/bin/bash
+f'''#!/bin/bash
 #SBATCH --job-name={self.prefix}
 #SBATCH --nodes=1
 #SBATCH --ntasks={self.cpus}
