@@ -73,6 +73,8 @@ class Relax:
         self.hours = None
         self.nk = 1
 
+        self.locked = None
+
     def get_position_info_(self, ase_object):
 
         atomic_positions = ''
@@ -80,9 +82,18 @@ class Relax:
         symbols = ase_object.get_chemical_symbols()
         unique_symbols = list(set(symbols))
         atom_count = len(positions)
-        for atom_set in zip(symbols, positions):
+
+        if self.locked is None:
+            locked = np.ones((atom_count, 3))
+        elif len(self.locked) != atom_count:
+            raise ValueError('Locked dimensions do not match position dimensions.')
+        else:
+            locked = self.locked
+
+        for atom_set in zip(symbols, positions, locked):
             atomic_positions += f'   {atom_set[0]}\t{np.round(atom_set[1][0], 8):.8f}'
-            atomic_positions += f'\t{np.round(atom_set[1][1], 8):.8f}\t{np.round(atom_set[1][2], 8):.8f}\n'
+            atomic_positions += f'\t{np.round(atom_set[1][1], 8):.8f}\t{np.round(atom_set[1][2], 8):.8f}'
+            atomic_positions += f' {atom_set[2][0]} {atom_set[2][1]} {atom_set[2][2]}\n'
 
         self.num_atoms = atom_count
         self.num_elem = len(unique_symbols)
@@ -177,7 +188,7 @@ class Relax:
         self.get_cell_parameters_(self.geometry)
 
     def set_parameters(self, ecutwfc=None, ecutrho=None, conv_thr=None, mixing_beta=None, k_points=None,
-                       electron_maxstep=None, functional=None, nstep=None):
+                       electron_maxstep=None, functional=None, nstep=None, locked=None):
 
         if (self.functional is None) and (functional is None):
             warnings.warn('Functional is still not specified. Creating input will likely result in an error.',
@@ -225,7 +236,10 @@ class Relax:
         elif nstep is not None:
             self.nstep = nstep
 
-    def create_input(self, repeat=False):
+        if (self.locked is None) and (locked is not None):
+            self.locked = locked
+
+    def create_input(self):  # Note - removed 'repeat' parameter. What was this for?
 
         if self.set_prefix_():
 
@@ -307,4 +321,3 @@ class Relax:
         else:
 
             print(f'Muted redundant bash file {self.prefix}.sh')
-
