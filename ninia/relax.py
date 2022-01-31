@@ -83,10 +83,14 @@ class Relax:
         unique_symbols = list(set(symbols))
         atom_count = len(positions)
 
-        if len(self.locked) != atom_count:
+        if self.locked is False:
+            locked = np.ones((atom_count, 3))
+        elif len(self.locked) != atom_count:
             raise ValueError('Locked dimensions do not match position dimensions.')
+        else:
+            locked = self.locked
 
-        for atom_set in zip(symbols, positions, self.locked):
+        for atom_set in zip(symbols, positions, locked):
             atomic_positions += f'   {atom_set[0]}\t{np.round(atom_set[1][0], 8):.8f}'
             atomic_positions += f'\t{np.round(atom_set[1][1], 8):.8f}\t{np.round(atom_set[1][2], 8):.8f}'
             atomic_positions += f' {atom_set[2][0]:1.0f} {atom_set[2][1]:1.0f} {atom_set[2][2]:1.0f}\n'
@@ -232,7 +236,10 @@ class Relax:
         elif nstep is not None:
             self.nstep = nstep
 
-        self.locked = locked
+        if (self.locked is None) and (locked is None):
+            self.locked = False
+        elif locked is not None:
+            self.locked = locked
 
     def create_input(self):  # Note - removed 'repeat' parameter. What was this for?
 
