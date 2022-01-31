@@ -236,8 +236,7 @@ class Relax:
         elif nstep is not None:
             self.nstep = nstep
 
-        if (self.locked is None) and (locked is not None):
-            self.locked = locked
+        self.locked = locked
 
     def create_input(self):  # Note - removed 'repeat' parameter. What was this for?
 
