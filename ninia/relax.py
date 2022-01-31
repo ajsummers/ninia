@@ -93,7 +93,7 @@ class Relax:
         for atom_set in zip(symbols, positions, locked):
             atomic_positions += f'   {atom_set[0]}\t{np.round(atom_set[1][0], 8):.8f}'
             atomic_positions += f'\t{np.round(atom_set[1][1], 8):.8f}\t{np.round(atom_set[1][2], 8):.8f}'
-            atomic_positions += f' {atom_set[2][0]} {atom_set[2][1]} {atom_set[2][2]}\n'
+            atomic_positions += f' {atom_set[2][0]:1.0f} {atom_set[2][1]:1.0f} {atom_set[2][2]:1.0f}\n'
 
         self.num_atoms = atom_count
         self.num_elem = len(unique_symbols)
