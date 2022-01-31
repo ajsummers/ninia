@@ -74,6 +74,7 @@ class Relax:
         self.nk = 1
 
         self.locked = None
+        self.catkit = False
 
     def get_position_info_(self, ase_object):
 
@@ -121,7 +122,8 @@ class Relax:
     def get_cell_parameters_(self, ase_object):
 
         supercell = ase_object.get_cell()
-        supercell[2][2] = 2 * np.max(ase_object.get_positions().T[2])
+        if not self.catkit:
+            supercell[2][2] = 2 * np.max(ase_object.get_positions().T[2])
         cell_parameters = ''
 
         for dimension in supercell:
@@ -188,7 +190,7 @@ class Relax:
         self.get_cell_parameters_(self.geometry)
 
     def set_parameters(self, ecutwfc=None, ecutrho=None, conv_thr=None, mixing_beta=None, k_points=None,
-                       electron_maxstep=None, functional=None, nstep=None, locked=None):
+                       electron_maxstep=None, functional=None, nstep=None, locked=None, catkit=False):
 
         if (self.functional is None) and (functional is None):
             warnings.warn('Functional is still not specified. Creating input will likely result in an error.',
@@ -240,6 +242,8 @@ class Relax:
             self.locked = False
         elif locked is not None:
             self.locked = locked
+
+        self.catkit = catkit
 
     def create_input(self):  # Note - removed 'repeat' parameter. What was this for?
 
