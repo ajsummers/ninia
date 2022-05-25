@@ -34,13 +34,28 @@ Quantum Espresso needs a few things to compile:
 
 For these requirements, I have loaded the following modules into my HPC environment, 
 which are each compatible with each other: <br>
-```
+```commandline
 module load gcc/8.4.0
 module load mpich/3.2
 module load cmake/3.12.4
 ```
 > ***Notes***: My CMake version does not exactly match the requirements, but this was the latest available
-> on the system I used. *It still was able to compile this version of QE.* You may need to set environmental
+> on the system I used. It still was able to compile this version of QE. You may need to set environmental
 > variables for the modules you import. For more guidance on this, look to the Quantum Espresso user guide,
 > found in the Docs on the download page.
 
+Once we load the required modules/compilers, we can compile the package:
+```commandline
+cd qe-X.X/
+./configure --prefix=[desired directory]
+make all
+```
+Here, I use a different directory as the prefix since we don't have root permissions.
+
+Now we need to add the bin directory to our initialization file. In my case, this is the `.bashrc` file in
+the home directory. Navigate to the bin directory of QE using `cd bin` and print out the working directory
+using `pwd` copy the result path and navigate back to your initialization file (in my case, `cd $HOME` and
+`nano .bashrc`). Now add a line to include this directory:
+```commandline
+export PATH=[path to bin]:$PATH
+```
