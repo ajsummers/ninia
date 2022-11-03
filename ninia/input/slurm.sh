@@ -6,6 +6,9 @@ f'''#!/bin/bash
 #SBATCH --time={self.hours}:00:00
 #SBATCH --output={self.prefix}.o%j
 #SBATCH --error={self.prefix}.e%j
+#SBATCH --mem={self.memory}G
+#SBATCH --mail-type=FAIL,REQUEUE
+#SBATCH --mail-user=ajs0201@auburn.edu
 
 start=`date +%s`
 

@@ -5,6 +5,8 @@ f"""
     outdir      = '{self.output_dir}',
     pseudo_dir  = '{self.pseudo_dir}',
     nstep = {self.nstep},
+    forc_conv_thr = 1.0D-4,
+    etot_conv_thr = 7.3D-4,
  /
  &SYSTEM
     ibrav     = 0,
@@ -16,7 +18,7 @@ f"""
 
     occupations = 'smearing',
     smearing = 'mv',
-    degauss = 0.01,
+    degauss = 0.02,
  /
  &ELECTRONS
     conv_thr = {self.conv_thr}

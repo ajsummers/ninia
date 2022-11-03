@@ -73,8 +73,8 @@ class Relax:
         self.hours = None
         self.nk = 1
 
-        self.locked = None
-        self.catkit = False
+        self.locked = False
+        self.catkit = True
 
     def get_position_info_(self, ase_object):
 
@@ -85,7 +85,7 @@ class Relax:
         atom_count = len(positions)
 
         if self.locked is False:
-            locked = np.ones((atom_count, 3))
+            locked = np.zeros((atom_count, 3))
         elif len(self.locked) != atom_count:
             raise ValueError('Locked dimensions do not match position dimensions.')
         else:
