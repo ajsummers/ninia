@@ -137,10 +137,10 @@ def lock_atoms(lock: Union[str, Tuple[int]] = None, which: Tuple[int] = (0, 0, 0
     position_index = list(range(len(positions.splitlines())))
 
     if 'first' in lock:
-        lock.lstrip('first')
+        lock = lock.lstrip('first')
         lock = tuple(position_index[:int(lock) + 1])
     elif 'last' in lock:
-        lock.lstrip('last')
+        lock = lock.lstrip('last')
         lock = tuple(position_index[-int(lock):])
 
     new_positions = []
