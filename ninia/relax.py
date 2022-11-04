@@ -187,7 +187,7 @@ class Relax:
     def lock_atoms(self, lock: Union[str, Tuple[int]] = None, which: Tuple[int] = (0, 0, 0)) -> None:
 
         if self.atomic_positions is None:
-            raise RuntimeError('Atomic Positions are not set')
+            self.set_atomic_info(self.geometry)
 
         self.atomic_positions = utils.lock_atoms(lock, which, self.atomic_positions)
 
