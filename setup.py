@@ -5,7 +5,7 @@ with open('README.md', 'r', encoding='utf-8') as fh:
 
 setuptools.setup(
     name='ninia',
-    version='0.0.69',  # Nice
+    version='0.0.69a',  # Nice
     author='Alex Summers',
     author_email='ajs0201@auburn.edu',
     description='A small Python wrapper for Quantum Espresso - still in development',

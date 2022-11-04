@@ -26,7 +26,7 @@ class Relax:
     def __init__(self, control: Type[Control] = Control(), system: Type[System] = System(),
                  electrons: Type[Electrons] = Electrons(), job: Type[Job] = Job(),
                  geometry: Union[Type[Atom], Type[Atoms]] = None, input_dir: str = None,
-                 k_points: List[int] = None):
+                 k_points: Tuple[int] = (1, 1, 1, 0, 0, 0)):
 
         # Initialize class parameters
 
@@ -36,9 +36,7 @@ class Relax:
         self.job = job
         self.geometry = geometry
         self.input_dir = input_dir
-
-        if k_points is None:
-            self.k_points = [1, 1, 1, 0, 0, 0]
+        self.k_points = k_points
 
         self.cell_parameters = None
         self.atomic_species = None
