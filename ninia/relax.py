@@ -16,9 +16,9 @@ import os
 starting_dir = os.getcwd()
 
 input_string = pkg_resources.resource_string(__name__, 'input/relax.jinja2')
-input_template = Environment(loader=BaseLoader).from_string(input_string)
+input_template = Environment(loader=BaseLoader).from_string(input_string.decode('utf-8'))
 slurm_string = pkg_resources.resource_string(__name__, 'input/slurm.jinja2')
-slurm_template = Environment(loader=BaseLoader).from_string(slurm_string)
+slurm_template = Environment(loader=BaseLoader).from_string(slurm_string.decode('utf-8'))
 
 
 class Relax:
