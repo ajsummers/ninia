@@ -1,7 +1,7 @@
 
 from fnmatch import filter as flt  # Native filter() function is used as well
+from typing import Type, Union, List, Tuple
 from dataclasses import dataclass
-from typing import Type, Union
 import pkg_resources
 import sys
 import os
@@ -78,7 +78,7 @@ class Job:
     partition: str = 'general'
     time: int = 50
     memory: int = 100
-    mail_type: list[str] = None  # Options: ( NONE, BEGIN, END, FAIL, REQUEUE, ALL )
+    mail_type: List[str] = None  # Options: ( NONE, BEGIN, END, FAIL, REQUEUE, ALL )
     mail_user: str = None
     exec: str = 'pw.x'
     nk: int = None
@@ -86,7 +86,7 @@ class Job:
     output: str = None
 
 
-def position(geometry: Union[Type[Atom], Type[Atoms]] = None) -> tuple[int, int, str]:
+def position(geometry: Union[Type[Atom], Type[Atoms]] = None) -> Tuple[int, int, str]:
 
     atomic_positions = ''
     positions = geometry.get_positions().tolist()

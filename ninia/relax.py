@@ -7,7 +7,7 @@ For more information see the GitHub repository at https://github.com/ajsummers/n
 
 from ninia.utils import Control, System, Electrons, Job
 from jinja2 import Environment, FileSystemLoader
-from typing import Type, Union
+from typing import Type, Union, List
 from ase import Atom, Atoms
 from ninia import utils
 import os
@@ -20,7 +20,7 @@ class Relax:
     def __init__(self, control: Type[Control] = Control(), system: Type[System] = System(),
                  electrons: Type[Electrons] = Electrons(), job: Type[Job] = Job(),
                  geometry: Union[Type[Atom], Type[Atoms]] = None, input_dir: str = None,
-                 k_points: list[str] = None):
+                 k_points: List[str] = None):
 
         # Initialize class parameters
 
