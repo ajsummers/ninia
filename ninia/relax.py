@@ -46,7 +46,7 @@ class Relax:
         self.set_pseudodir()
 
         self.system.nat, self.system.ntyp, self.atomic_positions = utils.position(self.geometry)
-        self.atomic_species = utils.species(self.geometry)
+        self.atomic_species = utils.species(self.geometry, pseudo_dir=self.control.pseudo_dir)
         self.cell_parameters = utils.cell_parameters(self.geometry)
 
     def set_pseudodir(self, pseudo_dir: str = None):
