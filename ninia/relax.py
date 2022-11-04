@@ -6,13 +6,19 @@ For more information see the GitHub repository at https://github.com/ajsummers/n
 """
 
 from ninia.utils import Control, System, Electrons, Job
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, BaseLoader
 from typing import Type, Union, List
 from ase import Atom, Atoms
 from ninia import utils
+import pkg_resources
 import os
 
 starting_dir = os.getcwd()
+
+input_string = pkg_resources.resource_string(__name__, 'input/relax.jinja2')
+input_template = Environment(loader=BaseLoader).from_string(input_string)
+slurm_string = pkg_resources.resource_string(__name__, 'input/slurm.jinja2')
+slurm_template = Environment(loader=BaseLoader).from_string(slurm_string)
 
 
 class Relax:
@@ -134,8 +140,6 @@ class Relax:
 
         if self.set_prefix_():
 
-            environment = Environment(loader=FileSystemLoader('input/'))
-            input_template = environment.get_template('relax.jinja2')
             input_content = input_template.render(control=self.control, system=self.system, electrons=self.electrons,
                                                   atomic_species=self.atomic_species,
                                                   cell_parameters=self.cell_parameters,
@@ -160,9 +164,7 @@ class Relax:
 
         job_file = os.path.join(self.input_dir, f'{self.control.prefix}.sh')
         if not (os.path.isfile(job_file)):
-            environment = Environment(loader=FileSystemLoader('input/'))
-            job_template = environment.get_template('slurm.jinja2')
-            job_content = job_template.render(control=self.control, job=self.job)
+            job_content = slurm_template.render(control=self.control, job=self.job)
 
             with open(job_file, 'w') as f:
                 f.write(job_content)
