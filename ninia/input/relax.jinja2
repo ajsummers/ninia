@@ -68,7 +68,8 @@
 /
 
 ATOMIC_SPECIES
-{{ atomic_species }}
+{% for species in atomic_species %}{{ species[0] }} {{ species[1] }}    {{ species[2] }}
+{% endfor %}
 
 CELL_PARAMETERS angstrom
 {{ cell_parameters }}
@@ -77,4 +78,4 @@ ATOMIC_POSITIONS angstrom
 {{ atomic_positions }}
 
 K_POINTS automic
-{{ k_points }}
+{% for kp in k_points %} {{ kp }}{% endfor %}

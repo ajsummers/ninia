@@ -96,19 +96,19 @@ def position(geometry: Union[Type[Atom], Type[Atoms]] = None) -> Tuple[int, int,
 
     for atom_set in zip(symbols, positions):
         atomic_positions += f'   {atom_set[0]}\t{np.round(atom_set[1][0], 8):.8f}'
-        atomic_positions += f'\t{np.round(atom_set[1][1], 8):.8f}\t{np.round(atom_set[1][2], 8):.8f}'
+        atomic_positions += f'\t{np.round(atom_set[1][1], 8):.8f}\t{np.round(atom_set[1][2], 8):.8f}\n'
 
     return atom_count, len(unique_symbols), atomic_positions
     # nat, ntyp, atomic_positions
 
 
-def species(geometry: Union[Type[Atom], Type[Atoms]] = None, pseudo_dir: str = None) -> str:
+def species(geometry: Union[Type[Atom], Type[Atoms]] = None, pseudo_dir: str = None) -> List[List[str]]:
 
     symbols = geometry.get_chemical_symbols()
     unique_symbols = list(set(symbols))
 
     list_upf = flt(os.listdir(pseudo_dir), '*.[Uu][Pp][Ff]')
-    species_string = ''
+    species_list = []
 
     for symbol in unique_symbols:
 
@@ -116,9 +116,9 @@ def species(geometry: Union[Type[Atom], Type[Atoms]] = None, pseudo_dir: str = N
         match = list(filter(r.match, list_upf))[0]
         mw_species = molarmass_df.loc[symbol][0]
 
-        species_string += f'   {symbol}\t{mw_species}\t{match}\n'
+        species_list.append([symbol, mw_species, match])
 
-    return species_string
+    return species_list
 
 
 def cell_parameters(geometry: Union[Type[Atom], Type[Atoms]] = None) -> str:
