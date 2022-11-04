@@ -12,7 +12,7 @@
 
 start=`date +%s`
 
-mpirun -np {{ job.ntasks }} {{ job.exec }} {% if job.nk %}-nk {{ job.nk }}{% endif %} < {{ job.input }} > {{ job.output }}
+mpirun -np {{ job.ntasks }} {{ job.exec }} {% if job.nk %}-nk {{ job.nk }} {% endif %}< {{ job.input }} > {{ job.output }}
 
 end=`date +%s`
 

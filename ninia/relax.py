@@ -26,7 +26,7 @@ class Relax:
     def __init__(self, control: Type[Control] = Control(), system: Type[System] = System(),
                  electrons: Type[Electrons] = Electrons(), job: Type[Job] = Job(),
                  geometry: Union[Type[Atom], Type[Atoms]] = None, input_dir: str = None,
-                 k_points: List[str] = None):
+                 k_points: List[int] = None):
 
         # Initialize class parameters
 
@@ -36,7 +36,9 @@ class Relax:
         self.job = job
         self.geometry = geometry
         self.input_dir = input_dir
-        self.k_points = k_points
+
+        if k_points is None:
+            self.k_points = [1, 1, 1, 0, 0, 0]
 
         self.cell_parameters = None
         self.atomic_species = None
@@ -119,8 +121,8 @@ class Relax:
 
             return False
 
-    def create_input(self, control: Type[Control] = None, system: Type[System] = None, electrons: Type[Electrons] = None,
-                     geometry: Union[Type[Atom], Type[Atoms]] = None):
+    def create_input(self, control: Type[Control] = None, system: Type[System] = None,
+                     electrons: Type[Electrons] = None, geometry: Union[Type[Atom], Type[Atoms]] = None):
 
         if control is not None:
             self.control = control
@@ -157,10 +159,16 @@ class Relax:
             input_file = os.path.join(self.input_dir, f'{self.control.prefix}.i')
             print(f'Muted redundant input file {input_file}')
 
-    def create_job(self, job: Type[Job] = Job()):
+    def create_job(self, job: Type[Job] = None):
 
         if job is not None:
             self.job = job
+
+        self.check_directory_(self.input_dir)
+        if self.job.input is None:
+            self.job.input = os.path.join(self.input_dir, f'{self.control.prefix}.i')
+        if self.job.output is None:
+            self.job.output = os.path.join(self.input_dir, f'{self.control.prefix}.out')
 
         job_file = os.path.join(self.input_dir, f'{self.control.prefix}.sh')
         if not (os.path.isfile(job_file)):
