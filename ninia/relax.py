@@ -6,8 +6,8 @@ For more information see the GitHub repository at https://github.com/ajsummers/n
 """
 
 from ninia.utils import Control, System, Electrons, Job
+from typing import Type, Union, List, Tuple
 from jinja2 import Environment, BaseLoader
-from typing import Type, Union, List
 from ase import Atom, Atoms
 from ninia import utils
 import pkg_resources
@@ -183,3 +183,11 @@ class Relax:
         else:
 
             print(f'Muted redundant bash file {job_file}')
+
+    def lock_atoms(self, lock: Union[str, Tuple[int]] = None, which: Tuple[int] = (0, 0, 0)) -> None:
+
+        if self.atomic_positions is None:
+            raise RuntimeError('Atomic Positions are not set')
+
+        self.atomic_positions = utils.lock_atoms(lock, which, self.atomic_positions)
+

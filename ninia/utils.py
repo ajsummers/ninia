@@ -130,3 +130,28 @@ def cell_parameters(geometry: Union[Type[Atom], Type[Atoms]] = None) -> str:
         cell_string += f'{dimension[0]:.14f}\t{dimension[1]:.14f}\t{dimension[2]:.14f}\n'
 
     return cell_string
+
+
+def lock_atoms(lock: Union[str, Tuple[int]] = None, which: Tuple[int] = (0, 0, 0), positions: str = None) -> str:
+
+    position_index = list(range(len(positions.splitlines())))
+
+    if 'first' in lock:
+        lock.lstrip('first')
+        lock = tuple(position_index[:int(lock) + 1])
+    elif 'last' in lock:
+        lock.lstrip('last')
+        lock = tuple(position_index[-int(lock):])
+
+    new_positions = []
+    for index, line in enumerate(positions.splitlines()):
+        if index in lock:
+            line = re.sub(r' \d \d \d', '', line)
+            for value in which:
+                line += f' {value}'
+
+        new_positions.append(line)
+
+    new_positions = '\n'.join(new_positions)
+
+    return new_positions
