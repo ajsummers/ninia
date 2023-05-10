@@ -49,7 +49,10 @@
     input_dft       = '{{ system.input_dft }}',{% endif %}{% if system.assume_isolated %}
     assume_isolated = '{{ system.assume_isolated }}',{% endif %}{% if system.esm_bc %}
     esm_bc          = '{{ system.esm_bc }}',{% endif %}{% if system.starting_magnetizations %}{% for start_mag in system.starting_magnetizations %}
-    starting_magnetization({{ loop.index }}) = {{ start_mag }},{% endfor %}{% endif %}
+    starting_magnetization({{ loop.index }}) = {{ start_mag }},{% endfor %}{% if system.noncolin %}
+    noncolin        = {{ system.noncolin }},{% for start_mag in system.starting_magnetizations %}
+    angle1({{ loop.index }}) = 90.0,
+    angle2({{ loop.index }}) = 0.0,{% endfor %}{% endif %}{% endif %}
 /
 {# No required specifications for ELECTRONS #}
 &ELECTRONS{% if electrons.electron_maxstep %}

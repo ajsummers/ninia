@@ -56,6 +56,7 @@ class System:
     assume_isolated: str = None
     esm_bc: str = None
     starting_magnetizations: List[int] = None
+    noncolin: Union[bool, str] = None
 
 
 @dataclass
