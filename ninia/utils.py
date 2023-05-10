@@ -46,8 +46,8 @@ class System:
     tot_charge: float = None
     ecutwfc: float = None
     ecutrho: float = None
-    nosym: bool = None
-    nosym_evc: bool = None
+    nosym: Union[bool, str] = None
+    nosym_evc: Union[bool, str] = None
     occupations: str = 'smearing'
     degauss: float = 0.02
     smearing: str = 'mv'
@@ -55,19 +55,29 @@ class System:
     input_dft: str = None
     assume_isolated: str = None
     esm_bc: str = None
+    starting_magnetizations: List[int] = None
 
 
 @dataclass
 class Electrons:
     electron_maxstep: int = None
-    scf_must_converge: bool = None
+    scf_must_converge: Union[bool, str] = None
     conv_thr: float = None
-    adaptive_thr: bool = None
+    adaptive_thr: Union[bool, str] = None
     conv_thr_init: float = None
     mixing_mode: str = None
     mixing_beta: float = 0.7
     mixing_ndim: int = None
     diagonalization: str = None
+
+
+@dataclass
+class Cell:
+    cell_dynamics: str = None
+    press: float = None
+    wmass: float = None
+    cell_factor: float = None
+    cell_dofree: str = None
 
 
 @dataclass
@@ -105,7 +115,7 @@ def position(geometry: Union[Type[Atom], Type[Atoms]] = None) -> Tuple[int, int,
 def species(geometry: Union[Type[Atom], Type[Atoms]] = None, pseudo_dir: str = None) -> List[List[str]]:
 
     symbols = geometry.get_chemical_symbols()
-    unique_symbols = list(set(symbols))
+    unique_symbols = sorted(list(set(symbols)))
 
     list_upf = flt(os.listdir(pseudo_dir), '*.[Uu][Pp][Ff]')
     species_list = []

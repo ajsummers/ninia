@@ -48,7 +48,8 @@
     nspin           = {{ system.nspin }},{% endif %}{% if system.input_dft %}
     input_dft       = '{{ system.input_dft }}',{% endif %}{% if system.assume_isolated %}
     assume_isolated = '{{ system.assume_isolated }}',{% endif %}{% if system.esm_bc %}
-    esm_bc          = '{{ system.esm_bc }}',{% endif %}
+    esm_bc          = '{{ system.esm_bc }}',{% endif %}{% if system.starting_magnetizations %}{% for start_mag in system.starting_magnetizations %}
+    starting_magnetization({{ loop.index }}) = {{ start_mag }},{% endfor %}{% endif %}
 /
 {# No required specifications for ELECTRONS #}
 &ELECTRONS{% if electrons.electron_maxstep %}
@@ -64,7 +65,12 @@
 /
 &IONS {# Not implemented yet #}
 /
-&CELL {# Not implemented yet #}
+&CELL{% if cell.cell_dynamics %}
+    cell_dynamics    = {{ cell.cell_dynamics }},{% endif %}{% if cell.press %}
+    press            = {{ cell.press }},{% endif %}{% if cell.wmass %}
+    wmass            = {{ cell.wmass }},{% endif %}{% if cell.cell_factor %}
+    cell_factor      = {{ cell.cell_factor }},{% endif %}{% if cell.cell_dofree %}
+    cell_dofree      = {{ cell.cell_dofree }},{% endif %}
 /
 
 ATOMIC_SPECIES

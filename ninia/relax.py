@@ -5,7 +5,7 @@ and create a generic input file and bash script for use with Quantum Espresso.
 For more information see the GitHub repository at https://github.com/ajsummers/ninia.
 """
 
-from ninia.utils import Control, System, Electrons, Job
+from ninia.utils import Control, System, Electrons, Cell, Job
 from typing import Type, Union, List, Tuple
 from jinja2 import Environment, BaseLoader
 from ase import Atom, Atoms
@@ -24,7 +24,7 @@ slurm_template = Environment(loader=BaseLoader).from_string(slurm_string.decode(
 class Relax:
 
     def __init__(self, control: Type[Control] = Control(), system: Type[System] = System(),
-                 electrons: Type[Electrons] = Electrons(), job: Type[Job] = Job(),
+                 electrons: Type[Electrons] = Electrons(), cell: Type[Cell] = Cell(), job: Type[Job] = Job(),
                  geometry: Union[Type[Atom], Type[Atoms]] = None, input_dir: str = None,
                  k_points: Tuple[int] = (1, 1, 1, 0, 0, 0)):
 
@@ -33,6 +33,7 @@ class Relax:
         self.control = control
         self.system = system
         self.electrons = electrons
+        self.cell = cell
         self.job = job
         self.geometry = geometry
         self.input_dir = input_dir
@@ -120,7 +121,8 @@ class Relax:
             return False
 
     def create_input(self, control: Type[Control] = None, system: Type[System] = None,
-                     electrons: Type[Electrons] = None, geometry: Union[Type[Atom], Type[Atoms]] = None):
+                     electrons: Type[Electrons] = None, cell: Type[Cell] = None,
+                     geometry: Union[Type[Atom], Type[Atoms]] = None):
 
         if control is not None:
             self.control = control
@@ -128,6 +130,8 @@ class Relax:
             self.system = system
         if electrons is not None:
             self.electrons = electrons
+        if cell is not None:
+            self.cell = cell
         if geometry is not None:
             self.geometry = geometry
             self.set_atomic_info(geometry)
@@ -141,7 +145,7 @@ class Relax:
         if self.set_prefix_():
 
             input_content = input_template.render(control=self.control, system=self.system, electrons=self.electrons,
-                                                  atomic_species=self.atomic_species,
+                                                  cell=self.cell, atomic_species=self.atomic_species,
                                                   cell_parameters=self.cell_parameters,
                                                   atomic_positions=self.atomic_positions,
                                                   k_points=self.k_points)
