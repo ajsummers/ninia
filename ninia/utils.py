@@ -35,6 +35,7 @@ class Control:
 @dataclass
 class System:
     ibrav: int = 0
+    celldm: List[float] = None
     A: float = None
     B: float = None
     C: float = None

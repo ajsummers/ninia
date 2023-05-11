@@ -69,20 +69,20 @@
 &IONS {# Not implemented yet #}
 /
 &CELL{% if cell.cell_dynamics %}
-    cell_dynamics    = {{ cell.cell_dynamics }},{% endif %}{% if cell.press %}
+    cell_dynamics    = '{{ cell.cell_dynamics }}',{% endif %}{% if cell.press %}
     press            = {{ cell.press }},{% endif %}{% if cell.wmass %}
     wmass            = {{ cell.wmass }},{% endif %}{% if cell.cell_factor %}
     cell_factor      = {{ cell.cell_factor }},{% endif %}{% if cell.cell_dofree %}
-    cell_dofree      = {{ cell.cell_dofree }},{% endif %}
+    cell_dofree      = '{{ cell.cell_dofree }}',{% endif %}
 /
 
 ATOMIC_SPECIES
 {% for species in atomic_species %}{{ species[0] }}     {{ species[1] }}     {{ species[2] }}
 {% endfor %}
-
+{% if system.ibrav == 0 %}
 CELL_PARAMETERS angstrom
 {{ cell_parameters }}
-
+{% endif %}
 ATOMIC_POSITIONS angstrom
 {{ atomic_positions }}
 
