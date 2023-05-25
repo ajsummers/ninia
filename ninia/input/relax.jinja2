@@ -17,7 +17,9 @@
     max_seconds     = {{ control.max_seconds }},{% endif %}{%- if control.etot_conv_thr %}
     etot_conv_thr   = {{ control.etot_conv_thr }},{% endif %}{%- if control.forc_conv_thr %}
     forc_conv_thr   = {{ control.forc_conv_thr }},{% endif %}{%- if control.lelfield %}
-    lelfield        = {{ control.lelfield }},{% endif %}
+    lelfield        = {{ control.lelfield }},{% endif %}{%- if control.dipfield %}
+    dipfield        = {{ control.dipfield }},{% endif %}{%- if control.tefield %}
+    tefield         = {{ control.tefield }}
 /
 {# Required specifications for SYSTEM:
     - nat
@@ -54,7 +56,11 @@
     starting_magnetization({{ loop.index }}) = {{ start_mag }},{% endfor %}{% if system.noncolin %}
     noncolin        = {{ system.noncolin }},{% for start_mag in system.starting_magnetizations %}
     angle1({{ loop.index }}) = 90.0,
-    angle2({{ loop.index }}) = 0.0,{% endfor %}{% endif %}{% endif %}
+    angle2({{ loop.index }}) = 0.0,{% endfor %}{% endif %}{% endif %}{% if system.edir %}
+    edir            = {{ system.edir }},{% endif %}{% if system.emaxpos %}
+    emaxpos         = {{ system.emaxpos }},{% endif %}{% if system.eopreg %}
+    eopreg          = {{ system.eopreg }},{% endif %}{% if system.eamp %}
+    eamp            = {{ system.eamp }},
 /
 {# No required specifications for ELECTRONS #}
 &ELECTRONS{% if electrons.electron_maxstep %}

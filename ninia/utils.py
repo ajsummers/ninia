@@ -31,6 +31,8 @@ class Control:
     forc_conv_thr: float = None
     etot_conv_thr: float = None
     lelfield: Union[bool, str] = None
+    dipfield: Union[bool, str] = None
+    tefield: Union[bool, str] = None
 
 
 @dataclass
@@ -60,6 +62,10 @@ class System:
     esm_bc: str = None
     starting_magnetizations: List[int] = None
     noncolin: Union[bool, str] = None
+    edir: int = None
+    emaxpos: float = None
+    eopreg: float = None
+    eamp: float = None
 
 
 @dataclass
