@@ -30,6 +30,7 @@ class Control:
     max_seconds: float = None
     forc_conv_thr: float = None
     etot_conv_thr: float = None
+    lelfield: Union[bool, str] = None
 
 
 @dataclass
@@ -44,6 +45,7 @@ class System:
     cosBC: float = None
     nat: int = None
     ntyp: int = None
+    nbnd: int = None
     tot_charge: float = None
     ecutwfc: float = None
     ecutrho: float = None
@@ -124,7 +126,7 @@ def species(geometry: Union[Type[Atom], Type[Atoms]] = None, pseudo_dir: str = N
 
     for symbol in unique_symbols:
 
-        r = re.compile(rf'{symbol}[_|.]\S+\Z', flags=re.IGNORECASE)
+        r = re.compile(rf'{symbol}[_|.|-]\S+\Z', flags=re.IGNORECASE)
         match = list(filter(r.match, list_upf))[0]
         mw_species = molarmass_df.loc[symbol][0]
 
