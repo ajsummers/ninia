@@ -231,6 +231,7 @@ def parse_sisso_eqn(folder: str = '') -> pd.DataFrame:
         top_models_cont = handle.readlines()
 
     equ_df = pd.DataFrame(columns=['Rank', 'RMSE', 'MaxAE', 'Feature_ID', 'intercept', 'coeff', 'equation'])
+    top_models_cont.pop(0)
 
     for i, line in enumerate(top_models_cont):
         line = line.replace('(', '').replace(')', '')
@@ -246,6 +247,7 @@ def parse_sisso_eqn(folder: str = '') -> pd.DataFrame:
     with open(os.path.join(folder, top_models_coeff_file), 'r') as handle:
         top_models_coeff_cont = handle.readlines()
 
+    top_models_coeff_cont.pop(0)
     for i, line in enumerate(top_models_coeff_cont):
         line = re.sub(r'\A\s+\d+\s+', '', line)
         line = np.fromstring(line, sep=' ')
