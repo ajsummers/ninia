@@ -106,6 +106,6 @@ def run_sisso(sisso: Type[SISSO] = SISSO(), train_data: pd.DataFrame = None,
 
         feature_unit.to_csv('feature_unit', index=False, header=False, sep='\t')
 
-    subprocess.run(f'mpirun -n {sisso.ntasks} SISSO > log')
+    subprocess.run(f'mpirun -n {sisso.ntasks} SISSO > log', shell=True)
     os.chdir(starting_dir)
 
