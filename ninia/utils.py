@@ -106,6 +106,36 @@ class Job:
     output: str = None
 
 
+# SISSO class NOT set up for multitask learning (MTL)
+# Implemented operators: (+)(-)(*)(/)(exp)(exp-)(^-1)(^2)(^3)(sqrt)(cbrt)(log)(|-|)(scd)(^6)(sin)(cos)
+@dataclass
+class SISSO:
+    prefix: str = None
+    ntasks: int = 20
+    partition: str = 'nova'
+    time: int = 50
+    mem: int = 100
+    mail_type: List[str] = None  # Options: ( NONE, BEGIN, END, FAIL, REQUEUE, ALL )
+    mail_user: str = None
+
+    ptype: int = 1  # 1: regression, 2: classification
+    desc_dim: int = 3  # Dimension of descriptor, hyperparameter
+    nsample: int = None  # Number of samples in train.dat
+    restart: int = 0  # 0: starts from scratch, 1: continues the job (CONTINUE file)
+    nsf: int = None  # Number of scalar features in train.dat
+    ops: str = '(+)(-)(*)(/)'  # operators used when combining features
+    fcomplexity: int = 3  # Maximum feature complexity (# of operators in a feature, usually 0 to 7)
+    funit: str = None
+    fmax_min: float = 1e-3  # Feature discarded if max. abs. value < fmax_min
+    fmax_max: float = 1e5  # Feature discarded if max. abs. value > fmax_max
+    nf_sis: int = 20  # Number of features in each SIS-selected subspace
+    method_so: str = 'L0'
+    nl1l0: float = 1  # Only used if method_so = 'L1L0', number of LASSO-selected features for the L0
+    fit_intercept: Union[bool, str] = '.true.'  # Fit intercept for linear model
+    metric: str = 'RMSE'  # Metric for model selection for regression: RMSE or MaxAE (max. abs. error)
+    nmodels: int = 100  # Number of top-ranked models to output (see 'models' folder)
+
+
 def position(geometry: Union[Type[Atom], Type[Atoms]] = None) -> Tuple[int, int, str]:
 
     atomic_positions = ''
@@ -175,3 +205,65 @@ def lock_atoms(lock: Union[str, Tuple[int]] = None, which: Tuple[int] = (0, 0, 0
     new_positions = '\n'.join(new_positions)
 
     return new_positions
+
+
+def parse_sisso_eqn(folder: str = '') -> pd.DataFrame:
+
+    with open(os.path.join(folder, 'SISSO.in'), 'r') as handle:
+        sisso_content = handle.read()
+
+    desc_dim = int(list(re.finditer(r'desc_dim=\d+(?=\s+)', sisso_content))[0][0].replace('desc_dim=', ''))
+    nmodels = int(list(re.finditer(r'nmodels=\d+(?=\s+)', sisso_content))[0][0].replace('nmodels=', ''))
+
+    top_models_file = f'models/top{nmodels:04d}_{desc_dim:03d}d'
+    top_models_coeff_file = f'models/top{nmodels:04d}_{desc_dim:03d}d_coeff'
+
+    with open(os.path.join(folder, 'SIS_subspaces/Uspace.expressions'), 'r') as handle:
+        content = handle.readlines()
+
+    equ_dict = {}
+    for i, line in enumerate(content):
+        feature = list(re.finditer(r'.*(?=\s+corr)', line, flags=re.S))[0][0]
+        feature = feature.replace('^', '**')
+        equ_dict[i + 1] = feature
+
+    with open(os.path.join(folder, top_models_file), 'r') as handle:
+        top_models_cont = handle.readlines()
+
+    equ_df = pd.DataFrame(columns=['Rank', 'RMSE', 'MaxAE', 'Feature_ID', 'intercept', 'coeff', 'equation'])
+
+    for i, line in enumerate(top_models_cont):
+        line = line.replace('(', '').replace(')', '')
+        array = np.fromstring(line, sep='\t')
+        rank, rmse, maxae, *feature_id = array
+        rank = rank.astype(int)
+        feature_id = np.array(feature_id).astype(int)
+        equ_df.loc[i, 'Rank'] = rank
+        equ_df.loc[i, 'RMSE'] = rmse
+        equ_df.loc[i, 'MaxAE'] = maxae
+        equ_df.loc[i, 'Feature_ID'] = feature_id
+
+    with open(os.path.join(folder, top_models_coeff_file), 'r') as handle:
+        top_models_coeff_cont = handle.readlines()
+
+    for i, line in enumerate(top_models_coeff_cont):
+        line = re.sub(r'\A\s+\d+\s+', '', line)
+        line = np.fromstring(line, sep=' ')
+        equ_df.loc[i, 'intercept'] = line[0]
+        equ_df.loc[i, 'coeff'] = line[1:]
+
+    for i, row in enumerate(equ_df.iterrows()):
+        info = row[1]
+        equation = str(info['intercept'])
+        for feature_id, coeff in zip(info['Feature_ID'], info['coeff']):
+            if coeff < 0:
+                sign = '-'
+            else:
+                sign = '+'
+            equation += ''.join([sign, str(np.abs(coeff)), '*', equ_dict[feature_id]])
+        equ_df.loc[i, 'equation'] = equation
+
+    final_df = equ_df[['RMSE', 'MaxAE', 'equation']]
+
+    return final_df
+

@@ -1,0 +1,22 @@
+
+ptype={{ sisso.ptype }}
+ntask=1
+task_weighting=1
+scmt=.false.
+desc_dim={{ sisso.desc_dim }}
+nsample={{ sisso.nsample }}
+restart={{ sisso.restart }}
+
+nsf={{ sisso.nsf }}
+ops='{{ sisso.ops }}'
+fcomplexity={{ sisso.fcomplexity }}{% if sisso.funit %}
+funit={{ sisso.funit }}{% endif %}
+fmax_min={{ sisso.fmax_min }}
+fmax_max={{ sisso.fmax_max }}
+nf_sis={{ sisso.nf_sis }}
+
+method_so='{{ sisso.method_so }}'
+nl1l0={{ sisso.nl1l0 }}
+fit_intercept={{ sisso.fit_intercept }}
+metric='{{ sisso.metric }}'
+nmodels={{ sisso.nmodels }}
