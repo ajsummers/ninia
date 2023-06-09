@@ -21,7 +21,7 @@ slurm_template = Environment(loader=BaseLoader).from_string(slurm_string.decode(
 
 
 def gen_sisso(sisso: Type[SISSO] = SISSO(), train_data: pd.DataFrame = None,
-              feature_unit: Union[pd.DataFrame, np.typing.NDArray] = None, folder: str = None) -> None:
+              feature_unit: Union[pd.DataFrame, np.ndarray] = None, folder: str = None) -> None:
 
     if train_data is None:
         raise RuntimeError('Training data (train_data) is required for SISSO.')
@@ -67,7 +67,7 @@ def gen_sisso(sisso: Type[SISSO] = SISSO(), train_data: pd.DataFrame = None,
 
 
 def run_sisso(sisso: Type[SISSO] = SISSO(), train_data: pd.DataFrame = None,
-              feature_unit: Union[pd.DataFrame, np.typing.NDArray] = None, folder: str = None) -> None:
+              feature_unit: Union[pd.DataFrame, np.ndarray] = None, folder: str = None) -> None:
 
     if train_data is None:
         raise RuntimeError('Training data (train_data) is required for SISSO.')
