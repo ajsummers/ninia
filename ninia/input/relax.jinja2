@@ -9,7 +9,7 @@
     calculation     = '{% if control.calculation %}{{control.calculation}}{% else %}relax{% endif %}',
     prefix          = '{% if control.prefix %}{{control.prefix}}{% else %}untitled{% endif %}',
     outdir          = '{{control.outdir}}',
-    pseudo_dir      = '{{control.pseudo_dir}}',{% if system.nstep %}
+    pseudo_dir      = '{{control.pseudo_dir}}',{% if control.nstep %}
     nstep           = {{control.nstep}},{% endif %}{%- if control.verbosity %}
     verbosity       = '{{ control.verbosity }}',{% endif %}{%- if control.restart_mode %}
     restart_mode    = '{{ control.restart_mode }}',{% endif %}{%- if control.dt %}
@@ -20,6 +20,7 @@
     lelfield        = {{ control.lelfield }},{% endif %}{%- if control.dipfield %}
     dipfield        = {{ control.dipfield }},{% endif %}{%- if control.tefield %}
     tefield         = {{ control.tefield }},{% endif %}
+{# TODO - Add tstress #}
 /
 {# Required specifications for SYSTEM:
     - nat
