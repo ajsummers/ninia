@@ -10,15 +10,17 @@ from typing import Type, Union, List, Tuple
 from jinja2 import Environment, BaseLoader
 from ase import Atom, Atoms
 from ninia import utils
-import pkg_resources
+from importlib.resources import files
+from pathlib import Path
 import os
 
 starting_dir = os.getcwd()
 
-input_string = pkg_resources.resource_string(__name__, 'input/relax.jinja2')
-input_template = Environment(loader=BaseLoader).from_string(input_string.decode('utf-8'))
-slurm_string = pkg_resources.resource_string(__name__, 'input/slurm.jinja2')
-slurm_template = Environment(loader=BaseLoader).from_string(slurm_string.decode('utf-8'))
+input_text = files(__name__).joinpath('input/relax.jinja2').read_text('utf-8')
+input_template = Environment(loader=BaseLoader()).from_string(input_text)
+slurm_text = files(__name__).joinpath('input/slurm.jinja2').read_text('utf-8')
+slurm_template = Environment(loader=BaseLoader()).from_string(slurm_text)
+
 
 
 class Relax:
@@ -26,7 +28,7 @@ class Relax:
     def __init__(self, control: Type[Control] = Control(), system: Type[System] = System(),
                  electrons: Type[Electrons] = Electrons(), cell: Type[Cell] = Cell(), job: Type[Job] = Job(),
                  geometry: Union[Type[Atom], Type[Atoms]] = None, input_dir: str = None,
-                 k_points: Tuple[int] = (1, 1, 1, 0, 0, 0)):
+                 k_points: Tuple[int] = (1, 1, 1, 0, 0, 0), job_preamble: str = None,):
 
         # Initialize class parameters
 
@@ -35,6 +37,7 @@ class Relax:
         self.electrons = electrons
         self.cell = cell
         self.job = job
+        self.job_preamble = job_preamble
         self.geometry = geometry
         self.input_dir = input_dir
         self.k_points = k_points
@@ -46,7 +49,7 @@ class Relax:
     def set_atomic_info(self, geometry: Union[Type[Atom], Type[Atoms]] = None) -> None:
 
         if (self.geometry is None) and (geometry is None):
-            raise RuntimeError('Need to define geomtry info (ase.Atoms object).')
+            raise RuntimeError('Need to define geometry info (ase.Atoms object).')
         elif geometry is not None:
             self.geometry = geometry
 
@@ -161,10 +164,14 @@ class Relax:
             input_file = os.path.join(self.input_dir, f'{self.control.prefix}.i')
             print(f'Muted redundant input file {input_file}')
 
-    def create_job(self, job: Type[Job] = None):
+    def create_job(self, job: Type[Job] = None, template_file: str = None, extension: str = '.sh',
+                   job_preamble: str = None):
 
         if job is not None:
             self.job = job
+
+        if job_preamble is not None:
+            self.job_preamble = job_preamble
 
         self.check_directory_(self.input_dir)
         if self.job.input is None:
@@ -172,9 +179,14 @@ class Relax:
         if self.job.output is None:
             self.job.output = os.path.join(self.input_dir, f'{self.control.prefix}.out')
 
-        job_file = os.path.join(self.input_dir, f'{self.control.prefix}.sh')
+        job_file = os.path.join(self.input_dir, f'{self.control.prefix}{extension}')
         if not (os.path.isfile(job_file)):
-            job_content = slurm_template.render(control=self.control, job=self.job)
+
+            if template_file is None:
+                job_content = slurm_template.render(control=self.control, job=self.job)
+            else:
+                job_template = Environment(loader=BaseLoader()).from_string(Path(template_file).read_text())
+                job_content = job_template.render(control=self.control, job=self.job, preamble=self.job_preamble)
 
             with open(job_file, 'w') as f:
                 f.write(job_content)
