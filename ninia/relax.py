@@ -16,9 +16,9 @@ import os
 
 starting_dir = os.getcwd()
 
-input_text = files(__name__).joinpath('input/relax.jinja2').read_text('utf-8')
+input_text = files(__package__).joinpath('input/relax.jinja2').read_text('utf-8')
 input_template = Environment(loader=BaseLoader()).from_string(input_text)
-slurm_text = files(__name__).joinpath('input/slurm.jinja2').read_text('utf-8')
+slurm_text = files(__package__).joinpath('input/slurm.jinja2').read_text('utf-8')
 slurm_template = Environment(loader=BaseLoader()).from_string(slurm_text)
 
 
