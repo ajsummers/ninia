@@ -22,13 +22,12 @@ slurm_text = files(__name__).joinpath('input/slurm.jinja2').read_text('utf-8')
 slurm_template = Environment(loader=BaseLoader()).from_string(slurm_text)
 
 
-
 class Relax:
 
     def __init__(self, control: Type[Control] = Control(), system: Type[System] = System(),
                  electrons: Type[Electrons] = Electrons(), cell: Type[Cell] = Cell(), job: Type[Job] = Job(),
                  geometry: Union[Type[Atom], Type[Atoms]] = None, input_dir: str = None,
-                 k_points: Tuple[int] = (1, 1, 1, 0, 0, 0), job_preamble: str = None,):
+                 k_points: Tuple[int] = (1, 1, 1, 0, 0, 0), job_preamble: str = None, job_command: str = None,):
 
         # Initialize class parameters
 
@@ -38,6 +37,7 @@ class Relax:
         self.cell = cell
         self.job = job
         self.job_preamble = job_preamble
+        self.job_command = job_command
         self.geometry = geometry
         self.input_dir = input_dir
         self.k_points = k_points
@@ -165,13 +165,16 @@ class Relax:
             print(f'Muted redundant input file {input_file}')
 
     def create_job(self, job: Type[Job] = None, template_file: str = None, extension: str = '.sh',
-                   job_preamble: str = None):
+                   preamble: str = None, command: str = 'mpirun'):
 
         if job is not None:
             self.job = job
 
-        if job_preamble is not None:
-            self.job_preamble = job_preamble
+        if preamble is not None:
+            self.job_preamble = preamble
+
+        if command is not None:
+            self.job_command = command
 
         self.check_directory_(self.input_dir)
         if self.job.input is None:
@@ -183,10 +186,12 @@ class Relax:
         if not (os.path.isfile(job_file)):
 
             if template_file is None:
-                job_content = slurm_template.render(control=self.control, job=self.job)
+                job_content = slurm_template.render(control=self.control, job=self.job, preamble=self.job_preamble,
+                                                    command=self.job_command, )
             else:
                 job_template = Environment(loader=BaseLoader()).from_string(Path(template_file).read_text())
-                job_content = job_template.render(control=self.control, job=self.job, preamble=self.job_preamble)
+                job_content = job_template.render(control=self.control, job=self.job, preamble=self.job_preamble,
+                                                  command=self.job_command, )
 
             with open(job_file, 'w') as f:
                 f.write(job_content)
