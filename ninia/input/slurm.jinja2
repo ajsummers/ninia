@@ -11,10 +11,10 @@
 #SBATCH --mail-user={{ job.mail_user }}{% endif %}
 
 start=`date +%s`
-
-{{ job_preamble }}
-
-{{ job_command }} -np {{ job.ntasks }} {{ job.exec }} {% if job.nk %}-nk {{ job.nk }} {% endif %} -in {{ job.input }} > {{ job.output }}
+{% if preamble %}
+{{ preamble }}
+{% endif %}
+{{ command }} -np {{ job.ntasks }} {{ job.exec }} {% if job.nk %}-nk {{ job.nk }} {% endif %} -in {{ job.input }} > {{ job.output }}
 
 end=`date +%s`
 

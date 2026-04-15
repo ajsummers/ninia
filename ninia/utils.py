@@ -90,6 +90,7 @@ class Cell:
     cell_factor: float = None
     cell_dofree: str = None
 
+@dataclass
 class Ions:
     upscale: int = None
 
