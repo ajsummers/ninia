@@ -64,7 +64,8 @@
     eamp            = {{ system.eamp }},{% endif %}
 /
 {# No required specifications for ELECTRONS #}
-&ELECTRONS{% if electrons.electron_maxstep %}
+&ELECTRONS{% if electrons.startingwfc %}
+    startingwfc         = {{ electrons.startingwfc }},{% endif %}{% if electrons.electron_maxstep %}
     electron_maxstep    = {{ electrons.electron_maxstep }},{% endif %}{% if electrons.scf_must_converge %}
     scf_must_converge   = {{ electrons.scf_must_converge }},{% endif %}{% if electrons.conv_thr %}
     conv_thr            = {{ electrons.conv_thr }},{% endif %}{% if electrons.adaptive_thr %}
@@ -75,7 +76,8 @@
     mixing_ndim         = {{ electrons.mixing_ndim }},{% endif %}{% if electrons.diagonalization %}
     diagonalization     = {{ electrons.diagonalization }},{% endif %}
 /
-&IONS {# Not implemented yet #}
+&IONS{% if ions.upscale %}
+    upscale             = {{ ions.upscale }},{% endif %}
 /
 &CELL{% if cell.cell_dynamics %}
     cell_dynamics    = '{{ cell.cell_dynamics }}',{% endif %}{% if cell.press %}

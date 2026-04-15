@@ -70,6 +70,7 @@ class System:
 
 @dataclass
 class Electrons:
+    startingwfc: str = None
     electron_maxstep: int = None
     scf_must_converge: Union[bool, str] = None
     conv_thr: float = None
@@ -89,6 +90,8 @@ class Cell:
     cell_factor: float = None
     cell_dofree: str = None
 
+class Ions:
+    upscale: int = None
 
 @dataclass
 class Job:
