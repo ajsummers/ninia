@@ -8,7 +8,7 @@ if sys.version_info[0] == 2:
 
 __all__ = ['Relax', 'Control', 'System', 'Electrons', 'Cell', 'Ions',
            'Job', 'parse_sisso_eqn', 'gen_sisso', 'run_sisso']
-__version__ = '0.1.0'
+__version__ = '0.1.2'
 __author__ = 'Alex Summers'
 
 from ninia.relax import Relax

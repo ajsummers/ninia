@@ -14,7 +14,6 @@ import numpy as np
 
 # Pull in molar mass data from separate csv file
 mm_data = pd.read_csv(str(files(__package__).joinpath('data/mm_of_elements.csv')), index_col=0)
-# TODO - see if we can pull this in relatively with just pandas - I don't remember
 
 
 @dataclass
@@ -83,6 +82,12 @@ class Electrons:
 
 
 @dataclass
+class Ions:
+    upscale: int = None
+    bfgs_ndim: int = None
+
+
+@dataclass
 class Cell:
     cell_dynamics: str = None
     press: float = None
@@ -90,9 +95,6 @@ class Cell:
     cell_factor: float = None
     cell_dofree: str = None
 
-@dataclass
-class Ions:
-    upscale: int = None
 
 @dataclass
 class Job:

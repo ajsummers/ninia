@@ -77,7 +77,8 @@
     diagonalization     = {{ electrons.diagonalization }},{% endif %}
 /
 &IONS{% if ions.upscale %}
-    upscale             = {{ ions.upscale }},{% endif %}
+    upscale             = {{ ions.upscale }},{% endif %}{% if ions.bfgs_ndim %}
+    bfgs_ndim           = {{ ions.bfgs_ndim }},{% endif %}
 /
 &CELL{% if cell.cell_dynamics %}
     cell_dynamics    = '{{ cell.cell_dynamics }}',{% endif %}{% if cell.press %}

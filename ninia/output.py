@@ -7,8 +7,12 @@ import re
 
 def get_final_atoms(output_file, input_file=None):
 
-    with open(output_file, 'r') as f:
-        handle = f.read()
+    files = glob.glob(output_file)
+    if files:
+        with open(files[0], 'r') as f:
+            handle = f.read()
+    else:
+        raise IOError('No output file found')
 
     match = r'(?<=ATOMIC_POSITIONS)(.*?)(?=(End final coordinates|\n\n))'
     matches = re.findall(match, handle, flags=re.S)
