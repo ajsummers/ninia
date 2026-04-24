@@ -2,18 +2,18 @@
 from fnmatch import filter as flt  # Native filter() function is used as well
 from typing import Type, Union, List, Tuple
 from dataclasses import dataclass
-import pkg_resources
+from importlib.resources import files
 import sys
 import os
 import re
+import io
 
 from ase import Atom, Atoms
 import pandas as pd
 import numpy as np
 
 # Pull in molar mass data from separate csv file
-mm_data = pkg_resources.resource_stream(__name__, 'data/mm_of_elements.csv')
-molarmass_df = pd.read_csv(mm_data, encoding=sys.stdout.encoding, index_col=0)
+mm_data = pd.read_csv(str(files(__package__).joinpath('data/mm_of_elements.csv')), index_col=0)
 # TODO - see if we can pull this in relatively with just pandas - I don't remember
 
 
@@ -168,7 +168,7 @@ def species(geometry: Union[Type[Atom], Type[Atoms]] = None, pseudo_dir: str = N
 
         r = re.compile(rf'{symbol}[_|.|-]\S+\Z', flags=re.IGNORECASE)
         match = list(filter(r.match, list_upf))[0]
-        mw_species = molarmass_df.loc[symbol][0]
+        mw_species = mm_data.loc[symbol,'0']
 
         species_list.append([symbol, mw_species, match])
 

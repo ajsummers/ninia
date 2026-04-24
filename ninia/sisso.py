@@ -6,7 +6,7 @@ Script to create single-task SISSO configurations
 from ninia.utils import SISSO
 from typing import Type, Union, List, Tuple
 from jinja2 import Environment, BaseLoader
-import pkg_resources
+from importlib.resources import files
 import pandas as pd
 import numpy as np
 import subprocess
@@ -14,10 +14,10 @@ import os
 
 starting_dir = os.getcwd()
 
-sisso_string = pkg_resources.resource_string(__name__, 'input/SISSO.in.jinja2')
-sisso_template = Environment(loader=BaseLoader).from_string(sisso_string.decode('utf-8'))
-slurm_string = pkg_resources.resource_string(__name__, 'input/SISSO_job.sh.jinja2')
-slurm_template = Environment(loader=BaseLoader).from_string(slurm_string.decode('utf-8'))
+sisso_text = files(__package__).joinpath('input/SISSO.in.jinja2').read_text('utf-8')
+sisso_template = Environment(loader=BaseLoader()).from_string(sisso_text)
+slurm_text = files(__package__).joinpath('input/slurm.jinja2').read_text('utf-8')
+slurm_template = Environment(loader=BaseLoader()).from_string(slurm_text)
 
 
 def gen_sisso(sisso: Type[SISSO] = SISSO(), train_data: pd.DataFrame = None,

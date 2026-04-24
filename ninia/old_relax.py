@@ -6,11 +6,12 @@ For more information see the GitHub repository at https://github.com/ajsummers/n
 """
 
 
-import pkg_resources
+from importlib.resources import files
 import warnings
 import sys
 import os
 import re
+import io
 
 from fnmatch import filter as flt  # Native filter() function is used as well
 import pandas as pd
@@ -20,7 +21,7 @@ import numpy as np
 starting_dir = os.getcwd()
 
 # Pull in molar mass data from separate csv file
-mm_data = pkg_resources.resource_stream(__name__, 'data/mm_of_elements.csv')
+mm_data = io.BytesIO(files(__package__).joinpath('data/mm_of_elements.csv').read_bytes())
 molarmass_df = pd.read_csv(mm_data, encoding=sys.stdout.encoding, index_col=0)
 
 
