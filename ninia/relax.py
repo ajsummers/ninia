@@ -6,7 +6,7 @@ For more information see the GitHub repository at https://github.com/ajsummers/n
 """
 
 from ninia.utils import Control, System, Electrons, Cell, Ions, Job
-from typing import Tuple
+from typing import Tuple, Sequence
 from jinja2 import Environment, BaseLoader
 from ase import Atom, Atoms
 from ninia import utils
@@ -33,7 +33,7 @@ class Relax:
                  job: Job = Job(),
                  geometry: Atom | Atoms = None,
                  input_dir: str = None,
-                 k_points: Tuple[int] = (1, 1, 1, 0, 0, 0),
+                 k_points: Sequence[int] = (1, 1, 1, 0, 0, 0),
                  job_preamble: str = None,
                  job_command: str = None,):
 
@@ -218,7 +218,7 @@ class Relax:
 
             print(f'Muted redundant bash file {job_file}')
 
-    def lock_atoms(self, lock: str | Tuple[int] = None, which: Tuple[int] = (0, 0, 0)) -> None:
+    def lock_atoms(self, lock: str | Sequence[int] = None, which: Sequence[int] = (0, 0, 0)) -> None:
 
         if self.atomic_positions is None:
             self.set_atomic_info(self.geometry)

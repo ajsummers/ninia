@@ -1,6 +1,6 @@
 
 from fnmatch import filter as flt  # Native filter() function is used as well
-from typing import Type, Union, List, Tuple
+from typing import Type, Union, List, Tuple, Sequence
 from dataclasses import dataclass
 from importlib.resources import files
 import sys
@@ -188,7 +188,7 @@ def cell_parameters(geometry: Union[Type[Atom], Type[Atoms]] = None) -> str:
     return cell_string
 
 
-def lock_atoms(lock: Union[str, Tuple[int]] = None, which: Tuple[int] = (0, 0, 0), positions: str = None) -> str:
+def lock_atoms(lock: Union[str, Sequence[int]] = None, which: Sequence[int] = (0, 0, 0), positions: str = None) -> str:
 
     position_index = list(range(len(positions.splitlines())))
 
