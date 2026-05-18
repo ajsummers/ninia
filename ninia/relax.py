@@ -6,7 +6,7 @@ For more information see the GitHub repository at https://github.com/ajsummers/n
 """
 
 from ninia.utils import Control, System, Electrons, Cell, Ions, Job
-from typing import Type, Union, List, Tuple
+from typing import Tuple
 from jinja2 import Environment, BaseLoader
 from ase import Atom, Atoms
 from ninia import utils
@@ -24,10 +24,18 @@ slurm_template = Environment(loader=BaseLoader()).from_string(slurm_text)
 
 class Relax:
 
-    def __init__(self, control: Type[Control] = Control(), system: Type[System] = System(),
-                 electrons: Type[Electrons] = Electrons(), cell: Type[Cell] = Cell(), ions: Type[Ions] = Ions(),
-                 job: Type[Job] = Job(), geometry: Union[Type[Atom], Type[Atoms]] = None, input_dir: str = None,
-                 k_points: Tuple[int] = (1, 1, 1, 0, 0, 0), job_preamble: str = None, job_command: str = None,):
+    def __init__(self,
+                 control: Control = Control(),
+                 system: System = System(),
+                 electrons: Electrons = Electrons(),
+                 cell: Cell = Cell(),
+                 ions: Ions = Ions(),
+                 job: Job = Job(),
+                 geometry: Atom | Atoms = None,
+                 input_dir: str = None,
+                 k_points: Tuple[int] = (1, 1, 1, 0, 0, 0),
+                 job_preamble: str = None,
+                 job_command: str = None,):
 
         # Initialize class parameters
 
@@ -47,7 +55,7 @@ class Relax:
         self.atomic_species = None
         self.atomic_positions = None
 
-    def set_atomic_info(self, geometry: Union[Type[Atom], Type[Atoms]] = None) -> None:
+    def set_atomic_info(self, geometry: Atom | Atoms = None) -> None:
 
         if (self.geometry is None) and (geometry is None):
             raise RuntimeError('Need to define geometry info (ase.Atoms object).')
@@ -124,9 +132,13 @@ class Relax:
 
             return False
 
-    def create_input(self, control: Type[Control] = None, system: Type[System] = None,
-                     electrons: Type[Electrons] = None, cell: Type[Cell] = None, ions: Type[Ions] = None,
-                     geometry: Union[Type[Atom], Type[Atoms]] = None):
+    def create_input(self,
+                     control: Control = None,
+                     system: System = None,
+                     electrons: Electrons = None,
+                     cell: Cell = None,
+                     ions: Ions = None,
+                     geometry: Atom | Atoms = None):
 
         if control is not None:
             self.control = control
@@ -167,7 +179,7 @@ class Relax:
             input_file = os.path.join(self.input_dir, f'{self.control.prefix}.i')
             print(f'Muted redundant input file {input_file}')
 
-    def create_job(self, job: Type[Job] = None, template_file: str = None, extension: str = '.sh',
+    def create_job(self, job: Job = None, template_file: str = None, extension: str = '.sh',
                    preamble: str = None, command: str = 'mpirun'):
 
         if job is not None:
@@ -206,7 +218,7 @@ class Relax:
 
             print(f'Muted redundant bash file {job_file}')
 
-    def lock_atoms(self, lock: Union[str, Tuple[int]] = None, which: Tuple[int] = (0, 0, 0)) -> None:
+    def lock_atoms(self, lock: str | Tuple[int] = None, which: Tuple[int] = (0, 0, 0)) -> None:
 
         if self.atomic_positions is None:
             self.set_atomic_info(self.geometry)
